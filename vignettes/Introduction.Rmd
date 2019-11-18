@@ -132,22 +132,23 @@ T2DM_Tscores <- tissue.specific.scores(T2DM_genes$entrez,
 
 The output is a *data.frame* object containing the TSE score for all genes-tissue pairs.
 
-```{r, cache = TRUE, echo = FALSE}
+```{r, cache = TRUE, echo = FALSE }
 knitr::kable(T2DM_Tscores[1:5,]) %>%
   kableExtra::kable_styling(bootstrap_options = "striped", full_width = F) 
 ```
 
 This *data.frame* can be subsequently ordered based on the average of the TSE scores in order to prioritize putative gene targets (e.g. top 50 genes).
 
-```{r, t2d_ord, cache.lazy = TRUE, echo = TRUE}
+```{r, t2d_ord, cache.lazy = TRUE, echo = TRUE }
 T2DM_top50 <- T2DM_Tscores[order(T2DM_Tscores$avg_tissue_score, 
                                   decreasing = TRUE)[1:50],]
 ```
 
 The following plot shows the distribution of the TSE scores for the top 50 genes within each disease relevant tissue,. 
 
-```{r, t2d_plot1, fig.width=5, fig.height=3, cache.lazy = TRUE, echo = TRUE}
+```{r, t2d_plot1, fig.width=5, fig.height=3, cache.lazy = TRUE, echo = TRUE }
 library(ggplot2)
+library(reshape)
 data_t2d50 <- reshape::melt(as.matrix(T2DM_top50), id = 0)
 colnames(data_t2d50) <- c("EntrezID", "Tissue", "EfficacyScore")
 ggplot(data_t2d50, aes(x = Tissue, y = EfficacyScore, fill = Tissue)) +
@@ -164,6 +165,7 @@ Additionally, the following barplot reports the tissue-specific scores for the t
 
 ```{r, t2d_plot2, fig.width=5, fig.height=3, cache.lazy = TRUE, echo = TRUE}
 library(ggplot2)
+library(reshape)
 data_t2d5 <- reshape::melt(as.matrix(T2DM_top50[1:5,-ncol(T2DM_top50)]), id = 0)
 colnames(data_t2d5) <- c("EntrezID", "Tissue", "EfficacyScore")
 data_t2d5$EntrezID = factor(data_t2d5$EntrezID)
@@ -340,10 +342,10 @@ knitr:::kable(head(tab_score)) %>%
 
 A shiny-based application was built for the visualization of  tissue-specific gene networks highlighting connections between disease-genes and drug(gene)-targets. 
 
-```{r, cache.lazy = TRUE, eval = FALSE}
-library('shiny')
-library('visNetwork')
-library('org.Hs.eg.db')
+```{r, cache.lazy = TRUE, }
+library(shiny)
+library(visNetwork)
+library(org.Hs.eg.db)
 
 visualize.graph(tissue_scores = T2DM_Tscores, 
                  disease_genes =T2DM_genes$entrez[1:5],
@@ -368,7 +370,7 @@ tsrwr = build.tissue.specific.networks(tissue_scores = T2DM_Tscores, disease_gen
 
 Then, ThETA provides functions to compile 
 
-* biological annotations which are significantly associated with a set of genes (by using th over-representation analysis);
+* biological annotations which are significantly associated with a set of genes (by using over-representation analysis);
 * plots for interpreting the ORA analysis;
 * pubmed trend plots based on a set of gene targets.
 
