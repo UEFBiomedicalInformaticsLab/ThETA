@@ -6,7 +6,7 @@ Authors@R:
     c(person(given = "Mario",
              family = "Failli",
              role = c("aut", "cre"),
-             email = "mario.failli@uef.fi"),
+             email = "m.failli@tigem.it"),
       person(given = "Vittorio",
              family = "Fortino",
              role = "aut",
@@ -19,10 +19,10 @@ LazyData: true
 RoxygenNote: 6.1.1
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
-Imports: Rdpack
+Imports: Rdpack, RCurl, SPARQL, XML, MIGSA, ReactomePA, clusterProfiler, enrichplot, dnet, mltools, snow, doParallel
 RdMacros: Rdpack
 NeedsCompilation: no
 Packaged: 2019-11-18 08:45:57 UTC; vittfo
 Author: Mario Failli [aut, cre],
   Vittorio Fortino [aut]
-Maintainer: Mario Failli <mario.failli@uef.fi>
+Maintainer: Vittorio Fortino <vittorio.fortino@uef.fi>
