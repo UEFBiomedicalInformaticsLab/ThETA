@@ -21,7 +21,15 @@ You must have the following packages installed:
 
 You can install ThETA from GitHub by using the [devtools](https://cran.r-project.org/web/packages/devtools/index.html) package. 
 
+If you do not have devtools installed, you can do so by:
 ```r
+install.packages("devtools")
+```
+
+and then to install ThETA:
+
+```r
+library(devtools)
 install_github("vittoriofortino84/ThETA/ThETA")
 ```
 
