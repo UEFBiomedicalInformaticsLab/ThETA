@@ -7,6 +7,10 @@ Authors@R:
              family = "Failli",
              role = c("aut", "cre"),
              email = "m.failli@tigem.it"),
+      person(given = "Jussi",
+             family = "Paananen",
+             role = "aut",
+             email = "jussi.paananen@uef.fi"),
       person(given = "Vittorio",
              family = "Fortino",
              role = "aut",
@@ -24,5 +28,6 @@ RdMacros: Rdpack
 NeedsCompilation: no
 Packaged: 2019-11-18 08:45:57 UTC; vittfo
 Author: Mario Failli [aut, cre],
+  Jussi Paananen [aut],
   Vittorio Fortino [aut]
 Maintainer: Vittorio Fortino <vittorio.fortino@uef.fi>
