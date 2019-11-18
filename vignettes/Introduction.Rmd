@@ -118,19 +118,19 @@ T2DM_genes = dis_vrnts[[which(names(dis_vrnts) == "EFO:0001360")]]
 T2DM_rel_tissue_scores = disease_tissue_zscores$z[which(rownames(disease_tissue_zscores$z) == "EFO:0001360"),]
 ```
 
-3. A tissue-specific efficacy (TSE) score is finnly estimated for all genes that are expressed in the tissues that are relevant for T2D.
+3. A tissue-specific efficacy (TSE) score is then estimated for all genes that are expressed in the tissues that are relevant for T2D.
 
 ```{r, t2d_sco, cache.lazy = TRUE, echo = TRUE, results = 'hide'}
 T2DM_Tscores <- tissue.specific.scores(T2DM_genes$entrez, 
                                         ppi_network = ppi_strdb_700, 
-                                        directed_network = F, 
+                                        directed_network = FALSE, 
                                         tissue_expr_data = gtexv7_zscore,
                                         dis_relevant_tissues = T2DM_rel_tissue_scores, 
                                         W = centrality_score$borda.disc, 
-                                        cutoff = 4, verbose = T)
+                                        cutoff = 4, verbose = TRUE)
 ```
 
-The output is a *data.frame* object containing the TSE score for all pairs genes-tissue.
+The output is a *data.frame* object containing the TSE score for all genes-tissue pairs.
 
 ```{r, cache = TRUE, echo = FALSE}
 knitr::kable(T2DM_Tscores[1:5,]) %>%
@@ -160,7 +160,7 @@ ggplot(data_t2d50, aes(x = Tissue, y = EfficacyScore, fill = Tissue)) +
                 axis.text.x=element_text(size = 7)) 
 ```
 
-Instead, the following barplot reports the tissue-specific scores for the top 5 genes within each tissue.
+Additionally, the following barplot reports the tissue-specific scores for the top 5 genes within each tissue.
 
 ```{r, t2d_plot2, fig.width=5, fig.height=3, cache.lazy = TRUE, echo = TRUE}
 library(ggplot2)
