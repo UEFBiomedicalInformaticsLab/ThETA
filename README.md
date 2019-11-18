@@ -32,7 +32,8 @@ vignette("Introduction", package = "ThETA")
 vignette("DataProcessing", package = "ThETA")
 ```
 
-### Contcat Information
+### Contact Information
 Mario Failli <m.failli@tigem.it>
+
 Vittorio Fortino <vittorio.fortino@uef.fi>
 
