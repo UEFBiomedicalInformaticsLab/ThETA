@@ -343,6 +343,7 @@ A shiny-based application was built for the visualization of  tissue-specific ge
 ```{r, cache.lazy = TRUE, eval = FALSE}
 library('shiny')
 library('visNetwork')
+library('org.Hs.eg.db')
 
 visualize.graph(tissue_scores = T2DM_Tscores, 
                  disease_genes =T2DM_genes$entrez[1:5],

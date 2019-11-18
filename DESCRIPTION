@@ -17,7 +17,7 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-Suggests: knitr, rmarkdown, MIGSA, ReactomePA, clusterProfiler, enrichplot, ggplot2, visNetwork, dplyr, ggpubr, kableExtra
+Suggests: knitr, rmarkdown, MIGSA, ReactomePA, clusterProfiler, enrichplot, ggplot2, visNetwork, dplyr, ggpubr, kableExtra, grex, CePa
 VignetteBuilder: knitr
 Imports: Rdpack, RCurl, SPARQL, XML, dnet, mltools, snow, doParallel
 RdMacros: Rdpack
