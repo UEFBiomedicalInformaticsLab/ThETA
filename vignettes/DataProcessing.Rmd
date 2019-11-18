@@ -98,7 +98,7 @@ The parameter *top* can be used to extend the initial set of disease-relevant ge
 T2DM_tiss_zscore <- dis.rel.tissues(disease_genes = T2DM_genes$entrez, 
                                       ppi_network = ppi_strdb_700, weighted = TRUE,
                                       tissue_expr_data = gtexv7_zscore, 
-                                      thr = 1, top=0, rand = 1000, verbose = T) # rand = 10000 is higlhy recommended
+                                      thr = 1, top=0, rand = 1000, verbose = T) # rand = 10000 is highly recommended
 ```
 
 The previous code generates the following table of z-scores, indicating significant associations between disease and tissues in GTEx. 

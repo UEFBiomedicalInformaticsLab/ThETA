@@ -6,7 +6,11 @@ Authors@R:
     c(person(given = "Mario",
              family = "Failli",
              role = c("aut", "cre"),
-             email = "mario.failli@uef.fi"),
+             email = "m.failli@tigem.it"),
+      person(given = "Jussi",
+             family = "Paananen",
+             role = "aut",
+             email = "jussi.paananen@uef.fi"),
       person(given = "Vittorio",
              family = "Fortino",
              role = "aut",
@@ -17,12 +21,13 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-Suggests: knitr, rmarkdown
+Suggests: knitr, rmarkdown, MIGSA, ReactomePA, clusterProfiler, enrichplot, ggplot2, visNetwork, dplyr, ggpubr, kableExtra, grex, CePa, httr, jsonlite, ggpubr
 VignetteBuilder: knitr
-Imports: Rdpack
+Imports: Rdpack, RCurl, SPARQL, XML, dnet, mltools, snow, doParallel, reshape
 RdMacros: Rdpack
 NeedsCompilation: no
 Packaged: 2019-11-18 08:45:57 UTC; vittfo
 Author: Mario Failli [aut, cre],
+  Jussi Paananen [aut],
   Vittorio Fortino [aut]
-Maintainer: Mario Failli <mario.failli@uef.fi>
+Maintainer: Vittorio Fortino <vittorio.fortino@uef.fi>
