@@ -28,7 +28,7 @@ and then to install ThETA:
 
 ```r
 library(devtools)
-install_github("vittoriofortino84/ThETA/ThETA")
+install_github("vittoriofortino84/ThETA")
 ```
 
 Please, open the available vignette files to learn how to use this R package.
