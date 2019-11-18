@@ -1,0 +1,28 @@
+Package: ThETA
+Title: Transcriptome-based efficacy estimates of
+        drug-target(gene)-disease associations.
+Version: 0.0.0.9000
+Authors@R: 
+    c(person(given = "Mario",
+             family = "Failli",
+             role = c("aut", "cre"),
+             email = "mario.failli@uef.fi"),
+      person(given = "Vittorio",
+             family = "Fortino",
+             role = "aut",
+             email = "vittorio.fortino@uef.fi"))
+Description: What the package does (one paragraph).
+Depends: R (>= 3.5.0)
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
+Imports: Rdpack
+RdMacros: Rdpack
+NeedsCompilation: no
+Packaged: 2019-11-18 08:45:57 UTC; vittfo
+Author: Mario Failli [aut, cre],
+  Vittorio Fortino [aut]
+Maintainer: Mario Failli <mario.failli@uef.fi>

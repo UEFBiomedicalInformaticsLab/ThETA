@@ -1,0 +1,377 @@
+,disease.id,disease.name
+DOID:2841,EFO:0000270,asthma
+CUI:C0011854,EFO:0001359,type I diabetes mellitus
+CUI:C0011882,EFO:1000783,diabetic neuropathy
+DOID:9884,Orphanet:98473,muscular dystrophy
+CUI:C0010481,EFO:0003099,cushing syndrome
+CUI:C2363142,EFO:1000560,T-Cell Prolymphocytic Leukemia
+CUI:C0235272,,retinal damage
+DOID:5419,EFO:0000692,schizophrenia
+CUI:C0238528,EFO:0009424,Yersinia enterocolitica infectious disease
+CUI:C0005586,EFO:0000289,bipolar disorder
+DOID:14504,EFO:1001380,Niemann-Pick disease
+CUI:C0238461,EFO:1000595,Thyroid Gland Undifferentiated (Anaplastic) Carcinoma
+CUI:C0004153,EFO:0003914,atherosclerosis
+CUI:C1522378,,large granular lymphocytic leukaemia
+CUI:C0206701,MONDO:0024621,serous cystadenocarcinoma
+CUI:C0729958,,lung transplant rejection
+DOID:2377,EFO:0003885,multiple sclerosis
+DOID:12858,Orphanet:399,Huntington disease
+CUI:C0009319,EFO:0003872,colitis
+CUI:C0043116,Orphanet:83330,Werdnig-Hoffmann disease
+CUI:C0268631,Orphanet:22,4-hydroxybutyric aciduria
+CUI:C0023493,EFO:0000209,T-cell acute lymphoblastic leukemia
+CUI:C0702166,EFO:0003894,acne
+DOID:9538,EFO:0001378,multiple myeloma
+CUI:C0011860,EFO:0001360,type II diabetes mellitus
+DOID:9970,EFO:0001073,obesity
+DOID:891,Orphanet:98261,progressive myoclonic epilepsy
+DOID:0050908,EFO:0000198,myelodysplastic syndrome
+DOID:684,EFO:0000182,hepatocellular carcinoma
+CUI:C0043207,Orphanet:3463,Wolfram syndrome
+DOID:1969,EFO:1000632,cerebral palsy
+DOID:8893,EFO:0000676,psoriasis
+DOID:0050156,EFO:0000768,idiopathic pulmonary fibrosis
+DOID:10283,MONDO:0008315,prostate cancer
+CUI:C0015802,EFO:0008553,femur fracture
+DOID:3498,EFO:0002517,pancreatic ductal adenocarcinoma
+DOID:9074,EFO:0002690,systemic lupus erythematosus
+CUI:C0423704,,neurological pain disorder
+DOID:9206,EFO:0000280,Barrett's esophagus
+CUI:C0919628,EFO:0002625,teratozoospermia
+DOID:8712,EFO:0008514,neurofibromatosis
+CUI:C0024623,EFO:0003897,stomach neoplasm
+CUI:C0085786,MONDO:0002429,idiopathic interstitial pneumonia
+DOID:1826,EFO:0000474,epilepsy
+DOID:1883,EFO:0003047,hepatitis C infection
+CUI:C0277580,,idiosyncratic drug effect 
+DOID:0050851,MONDO:0000490,glomerulosclerosis
+DOID:3042,EFO:1000668,allergic contact dermatitis
+DOID:10632,Orphanet:3463,Wolfram syndrome
+CUI:C0263361,EFO:1001494,psoriasis vulgaris
+DOID:2355,EFO:0004272,anemia
+CUI:C0162671,Orphanet:550,MELAS syndrome
+CUI:C0033817,EFO:0001076,pseudomonas infection
+DOID:9351,EFO:0000400,diabetes mellitus
+DOID:12205,EFO:0005547,dengue disease
+DOID:5842,EFO:0003101,testicular seminoma
+CUI:C0001792,,old age
+CUI:C0238463,EFO:0000641,papillary thyroid carcinoma
+DOID:1380,EFO:0004230,endometrial neoplasm
+CUI:C0007193,EFO:0000407,dilated cardiomyopathy
+DOID:0050696,,fetal alcohol spectrum disorder
+DOID:3969,EFO:0000641,papillary thyroid carcinoma
+DOID:11612,EFO:0000660,polycystic ovary syndrome
+DOID:11981,EFO:0001074,morbid obesity
+DOID:0060074,EFO:0000432,ductal carcinoma in situ
+CUI:C0019693,EFO:0000764,HIV infection
+DOID:848,EFO:0005856,arthritis
+CUI:C0024117,EFO:0000341,chronic obstructive pulmonary disease
+CUI:C0276548,EFO:0002608,AIDS dementia
+CUI:C0270726,Orphanet:58,Alexander disease
+DOID:3284,EFO:1000576,Thymic Carcinoma
+DOID:1485,Orphanet:586,cystic fibrosis
+CUI:C0456891,Orphanet:2257,primary pulmonary hypoplasia
+DOID:11722,Orphanet:206647,myotonic dystrophy
+CUI:C0042842,EFO:1001237,vitamin A deficiency
+DOID:10652,EFO:0000249,Alzheimer's disease
+DOID:8398,EFO:0002506,osteoarthritis
+DOID:971,EFO:1001434,Tendinopathy
+CUI:C0001430,EFO:0000232,adenoma
+CUI:C0392525,EFO:0004253,nephrolithiasis
+CUI:C0011633,EFO:0000398,dermatomyositis
+DOID:3008,EFO:0000186,invasive ductal carcinoma
+CUI:C0155877,,allergic asthma
+DOID:3069,EFO:0000272,astrocytoma
+CUI:C0243026,HP:0100806,sepsis
+DOID:11727,Orphanet:269,facioscapulohumeral dystrophy
+CUI:C0015695,MONDO:0004790,fatty liver
+DOID:768,Orphanet:790,retinoblastoma
+DOID:14330,EFO:0002508,Parkinson's disease
+CUI:C0018802,EFO:0000373,congestive heart failure
+CUI:C0038220,EFO:0008526,status epilepticus
+DOID:14250,EFO:0001064,Down syndrome
+DOID:0060041,EFO:0003756,autism spectrum disorder
+CUI:C0004096,EFO:0000270,asthma
+CUI:C0340529,,cardiac transplant disorder
+DOID:8577,EFO:0000729,ulcerative colitis
+DOID:11335,Orphanet:797,sarcoidosis
+CUI:C0003615,EFO:0007149,appendicitis
+CUI:C0018203,Orphanet:379,chronic granulomatous disease
+CUI:C0020538,EFO:0000537,hypertension
+DOID:1612,MONDO:0007254,breast cancer
+DOID:1324,MONDO:0008903,lung cancer
+CUI:C0393593,MONDO:0003441,dystonic disorder
+DOID:9296,EFO:0003959,cleft lip
+CUI:C0334267,,transitional cell carcinoma in situ
+CUI:C0349788,Orphanet:247,arrhythmogenic right ventricular dysplasia
+CUI:C0029456,EFO:0003882,osteoporosis
+CUI:C0022602,EFO:0002496,actinic keratosis
+CUI:C0039231,HP:0001649,tachycardia
+DOID:12206,EFO:0004227,Dengue Hemorrhagic Fever
+CUI:C0006142,MONDO:0007254,breast cancer
+CUI:C0013264,Orphanet:98896,Duchenne muscular dystrophy
+CUI:C0023462,EFO:0003025,acute megakaryoblastic leukaemia
+DOID:219,EFO:0004288,colonic neoplasm
+DOID:1793,EFO:0003860,pancreatic neoplasm
+DOID:1686,EFO:0000516,glaucoma
+DOID:0050912,MONDO:0000527,colon adenoma
+DOID:9261,EFO:0004252,nasopharyngeal neoplasm
+DOID:6543,EFO:0003894,acne
+DOID:0050745,EFO:0000403,diffuse large B-cell lymphoma
+CUI:C0032460,EFO:0000660,polycystic ovary syndrome
+DOID:12217,EFO:0006792,Lewy body dementia
+CUI:C0205969,EFO:1000576,Thymic Carcinoma
+CUI:C0234533,,generalized seizures
+DOID:12894,EFO:0000699,Sjogren syndrome
+CUI:C0013080,EFO:0001064,Down syndrome
+CUI:C0006287,Orphanet:70589,bronchopulmonary dysplasia
+DOID:13810,EFO:0004911,familial hypercholesterolemia
+DOID:3310,EFO:0000274,atopic eczema
+DOID:5520,EFO:0000181,head and neck squamous cell carcinoma
+CUI:C1531608,EFO:0003073,asymptomatic myeloma
+CUI:C0002797,MONDO:0025303,anaplasmosis
+CUI:C0002895,Orphanet:232,sickle cell anemia
+DOID:9256,EFO:0005842,colorectal cancer
+DOID:3491,Orphanet:881,Turner syndrome
+CUI:C0007785,MONDO:0002679,cerebral infarction
+CUI:C0878544,EFO:0000318,cardiomyopathy
+CUI:C0206157,Orphanet:607,nemaline myopathy
+CUI:C0085110,Orphanet:183660,severe combined immunodeficiency
+CUI:C0003469,EFO:0006788,anxiety disorder
+CUI:C1744559,Orphanet:1807,Setleis syndrome
+DOID:289,EFO:0001065,endometriosis
+DOID:3458,EFO:0000304,breast adenocarcinoma
+DOID:10534,EFO:0003897,stomach neoplasm
+CUI:C0026850,Orphanet:98473,muscular dystrophy
+DOID:332,EFO:0000253,amyotrophic lateral sclerosis
+CUI:C0553662,EFO:0002609,juvenile idiopathic arthritis
+CUI:C0003873,EFO:0000685,rheumatoid arthritis
+DOID:8106,,cellular phase chronic idiopathic myelofibrosis
+DOID:0050742,EFO:0003768,nicotine dependence
+CUI:C1321542,,infertility due to azoospermia
+DOID:0060180,EFO:0003872,colitis
+DOID:3191,Orphanet:607,nemaline myopathy
+DOID:9352,EFO:0001360,type II diabetes mellitus
+DOID:3312,EFO:0000289,bipolar disorder
+DOID:9415,,allergic asthma
+DOID:9744,EFO:0001359,type I diabetes mellitus
+CUI:C0011881,EFO:0000401,diabetic nephropathy
+DOID:11726,Orphanet:261,Emery-Dreifuss muscular dystrophy
+CUI:C0020443,HP:0003124,hypercholesterolemia
+DOID:8866,EFO:0002496,actinic keratosis
+DOID:0050872,EFO:0000563,large cell neuroendocrine carcinoma
+CUI:C0153594,EFO:0005088,testicular carcinoma
+DOID:4829,EFO:0000233,adenosquamous lung carcinoma
+DOID:0050861,EFO:0000365,colorectal adenocarcinoma
+DOID:4450,EFO:0000681,renal cell carcinoma
+DOID:9551,EFO:0003073,asymptomatic myeloma
+CUI:C0339527,Orphanet:65,Leber congenital amaurosis
+CUI:C0585362,EFO:0000199,oral squamous cell carcinoma
+CUI:C0036341,EFO:0000692,schizophrenia
+CUI:C0004623,EFO:0000771,bacterial disease
+DOID:12849,EFO:0003758,autism
+CUI:C0346647,EFO:1000359,Malignant Pancreatic Neoplasm
+CUI:C0002736,EFO:0000253,amyotrophic lateral sclerosis
+CUI:C0014544,EFO:0000474,epilepsy
+CUI:C0028043,EFO:0003768,nicotine dependence
+DOID:8778,EFO:0000384,Crohn's disease
+CUI:C0027708,Orphanet:654,nephroblastoma
+CUI:C0016658,EFO:0003931,bone fracture
+DOID:14749,MONDO:0002012,methylmalonic acidemia
+DOID:2394,MONDO:0008170,ovarian cancer
+DOID:3748,EFO:0005922,esophageal squamous cell carcinoma
+CUI:C0011644,EFO:1001993,scleroderma
+DOID:11723,Orphanet:98896,Duchenne muscular dystrophy
+CUI:C0025202,EFO:0000756,melanoma
+DOID:12351,EFO:1001345,alcoholic hepatitis
+CUI:C0042133,EFO:0000731,uterine fibroid
+DOID:11664,EFO:1000041,nephrosclerosis
+DOID:13809,Orphanet:79211,combined hyperlipidemia
+DOID:8947,EFO:0003770,diabetic retinopathy
+DOID:10923,Orphanet:232,sickle cell anemia
+DOID:2513,EFO:0004193,basal cell carcinoma
+CUI:C0011175,,dehydration
+CUI:C0686083,,carcinoma in situ of small intestine
+CUI:C0221757,Orphanet:60,alpha-1-antitrypsin deficiency
+CUI:C0019204,EFO:0000182,hepatocellular carcinoma
+CUI:C0235025,MONDO:0002316,motor peripheral neuropathy
+DOID:3457,EFO:0000553,invasive lobular carcinoma
+CUI:C0276655,,infection by Aspergillus fumigatus
+CUI:C0149925,EFO:0000702,small cell lung carcinoma
+CUI:C0279628,EFO:0000478,esophageal adenocarcinoma
+CUI:C1175175,EFO:0000694,severe acute respiratory syndrome
+CUI:C0023434,EFO:0000095,chronic lymphocytic leukemia
+DOID:0050589,EFO:0003767,inflammatory bowel disease
+CUI:C1720457,,renal disorder associated with type II diabetes mellitus
+DOID:0060201,,amyotrophic lateral sclerosis type 10 
+CUI:C0017601,EFO:0000516,glaucoma
+DOID:3151,EFO:1001927,cutaneous squamous cell carcinoma
+CUI:C0010674,Orphanet:586,cystic fibrosis
+CUI:C1257915,MONDO:0015185,intestinal polyposis syndrome
+DOID:9408,EFO:0008583,acute myocardial infarction
+CUI:C0242184,EFO:0009444,hypoxia
+DOID:1909,EFO:0000756,melanoma
+CUI:C1383860,EFO:0002503,cardiac hypertrophy
+CUI:C0009324,EFO:0000729,ulcerative colitis
+DOID:7442,EFO:0000203,monoclonal gammopathy
+DOID:8857,MONDO:0004670,lupus erythematosus
+DOID:8552,EFO:0000339,chronic myelogenous leukemia
+DOID:0050933,EFO:0002917,ovarian serous adenocarcinoma
+DOID:2957,EFO:1000049,pulmonary tuberculosis
+CUI:C0024419,EFO:0002616,macroglobulinemia
+CUI:C0035372,Orphanet:778,Rett syndrome
+DOID:1595,EFO:0003761,unipolar depression
+DOID:11432,EFO:1000418,Ovarian Endometriosis
+CUI:C0392620,,alcohol poisoning
+CUI:C0039585,Orphanet:754,androgen insensitivity syndrome
+CUI:C1997651,,erectile dysfunction associated with type 2 diabetes mellitus
+CUI:C0017168,EFO:0003948,gastroesophageal reflux disease
+CUI:C0036323,EFO:1001475,schistosomiasis
+CUI:C0039101,EFO:0001376,synovial sarcoma
+CUI:C0007102,EFO:0004288,colonic neoplasm
+DOID:4325,EFO:0007243,Ebola hemorrhagic fever
+DOID:3770,EFO:0009448,pulmonary fibrosis
+DOID:7685,,pancreatic non-invasive intraductal papillary-mucinous carcinoma
+CUI:C0040028,EFO:0000479,essential thrombocythemia
+DOID:0050211,EFO:0005226,swine influenza
+DOID:7693,EFO:0004214,abdominal aortic aneurysm
+DOID:9997,EFO:0002628,peripartum cardiomyopathy
+DOID:0050700,EFO:0000318,cardiomyopathy
+CUI:C0238198,Orphanet:44890,gastrointestinal stromal tumor
+CUI:C0149721,EFO:0003896,left ventricular hypertrophy
+CUI:C0686087,,carcinoma in situ of large intestine
+CUI:C0024236,Orphanet:79383,lymphedema
+CUI:C0028754,EFO:0001073,obesity
+CUI:C0014175,EFO:0001065,endometriosis
+CUI:C0038013,EFO:0003898,ankylosing spondylitis
+CUI:C0023467,EFO:0000222,acute myeloid leukemia
+CUI:C0028945,EFO:0000632,oligodendroglioma
+CUI:C0026847,EFO:0008525,spinal muscular atrophy
+CUI:C0026769,EFO:0003885,multiple sclerosis
+DOID:8029,,sporadic breast cancer
+CUI:C0041408,Orphanet:881,Turner Syndrome
+DOID:12930,EFO:0000407,dilated cardiomyopathy
+CUI:C0154681,EFO:0003782,motor neuron disease
+CUI:C0033740,MONDO:0002428,protozoa infectious disease
+DOID:14261,Orphanet:908,fragile X syndrome
+CUI:C0152439,MONDO:0004579, retinoschisis
+DOID:4866,MONDO:0003175,salivary gland adenoid cystic carcinoma
+CUI:C0270948,,neurogenic muscular atrophy
+DOID:4914,EFO:0000478,esophageal adenocarcinoma
+CUI:C0346627,EFO:0007330,intestinal cancer
+CUI:C0018805,EFO:0009506,heart injury
+CUI:C0032914,EFO:0000668,preeclampsia
+DOID:1555,EFO:0005531,urticaria
+DOID:2908,Orphanet:861,Treacher-Collins syndrome
+DOID:1936,EFO:0003914,atherosclerosis
+CUI:C0264797,EFO:0002629,viral cardiomyopathy
+CUI:C0241910,EFO:0005676,autoimmune hepatitis
+DOID:4362,EFO:0001061,cervical carcinoma
+CUI:C0340279,,ventricular hypertrophy 
+CUI:C0017636,EFO:0000519,glioblastoma multiforme
+CUI:C0376358,MONDO:0008315,prostate cancer
+DOID:10223,EFO:0000398,dermatomyositis
+DOID:13406,DOID:13406,pulmonary sarcoidosis
+CUI:C0040034,HP:0001873,thrombocytopenia
+CUI:C0020564,EFO:0002460,hypertrophy
+CUI:C0149782,EFO:0000708,squamous cell lung carcinoma
+CUI:C0267187,,intestinal metaplasia of gastric mucosa
+CUI:C0022408,EFO:1000999,joint disease
+CUI:C0036983,EFO:0006834,septic shock
+CUI:C0339573,EFO:0004190,open-angle glaucoma
+DOID:10325,EFO:0007485,silicosis
+DOID:8150,,pancreatic invasive intraductal papillary-mucinous carcinoma
+CUI:C0033300,Orphanet:740,Hutchinson-Gilford progeria syndrome
+CUI:C0023458,EFO:0000095,chronic lymphocytic leukemia
+CUI:C0346210,EFO:0002627,vulvar intraepithelial neoplasia
+CUI:C0026986,EFO:0000198,myelodysplastic syndrome
+DOID:10588,Orphanet:43,X-linked adrenoleukodystrophy
+CUI:C0400966,EFO:0003095,non-alcoholic fatty liver disease
+CUI:C0399440,Orphanet:2024,hereditary gingival fibromatosis
+DOID:7148,EFO:0000685,rheumatoid arthritis
+CUI:C0231341,Orphanet:79389,premature aging
+CUI:C0276447,,Rhinovirus infection
+DOID:1328,,Rift Valley fever
+CUI:C0152013,EFO:0005288,non-small cell lung adenocarcinoma
+DOID:2366,MONDO:0002282,West Nile fever
+CUI:C0340257,,ventilator-associated lung injury
+CUI:C1333978,EFO:0008504,hepatitis C virus induced hepatocellular carcinoma
+CUI:C0520541,EFO:0005251,hypotension
+DOID:1040,EFO:0000095,chronic lymphocytic leukemia
+DOID:1928,Orphanet:904,Williams syndrome
+CUI:C0242488,EFO:0004610,acute lung injury
+CUI:C0399396,,complex dental cavity
+DOID:4556,EFO:0003050,large cell lung carcinoma
+CUI:C0080151,MONDO:0025484,simian acquired immunodeficiency syndrome
+CUI:C0342751,,Pompe disease
+ infantile-onset form,,
+CUI:C0024141,EFO:0002690,systemic lupus erythematosus
+CUI:C0273115,,lung Injury
+CUI:C0085580,EFO:1002032,primary hypertension
+DOID:1059,EFO:0003847,mental retardation
+CUI:C0020473,EFO:0003774,hyperlipidemia
+CUI:C0034069,EFO:0009448,pulmonary fibrosis
+CUI:C0020542,EFO:0001361,pulmonary arterial hypertension
+DOID:3951,,acute myocarditis
+CUI:C1442797,,Rotavirus infection of children
+DOID:12712,Orphanet:655,nephronophthisis
+DOID:399,Orphanet:3389,tuberculosis
+CUI:C0085859,Orphanet:3453,autoimmune polyendocrinopathy type 1
+CUI:C0024437,EFO:0009606,macular degeneration
+CUI:C0025303,EFO:0004249,meningococcal infection
+DOID:3181,EFO:0000632,oligodendroglioma
+DOID:7061,EFO:0000094,B-cell acute lymphoblastic leukemia
+CUI:C0275804,,Streptococcal tonsillitis
+CUI:C1320188,,Escherichia coli infection of the central nervous system
+CUI:C0037929,EFO:1001919,spinal cord injury
+CUI:C0001339,EFO:1000652,acute pancreatitis
+DOID:4989,EFO:0000278,pancreatitis
+CUI:C0035334,Orphanet:791,retinitis pigmentosa
+CUI:C0948008,HP:0002140,ischemic stroke
+DOID:9119,EFO:0000222,acute myeloid leukemia
+DOID:1240,EFO:0000565,leukemia
+DOID:2378,EFO:0003929,relapsing-remitting multiple sclerosis
+CUI:C0036202,Orphanet:797,sarcoidosis
+CUI:C0733682,Orphanet:89936,X-linked hypophosphatemia
+CUI:C0006434,EFO:0009516,burn
+CUI:C1319860,,Sendai virus infection
+CUI:C0021400,EFO:0007328,influenza
+CUI:C0038436,EFO:0001358,post-traumatic stress disorder
+CUI:C0029435,,osteolysis
+CUI:C0013595,HP:0000964,eczema
+CUI:C0002874,HP:0001915,aplastic anemia
+DOID:9008,EFO:0003778,psoriatic arthritis
+DOID:7851,,pancreatic intraductal papillary-mucinous adenoma
+CUI:C0043117,EFO:0007160,autoimmune thrombocytopenic purpura
+CUI:C0011884,EFO:0003770,diabetic retinopathy
+CUI:C0812413,EFO:0000770,malignant pleural mesothelioma
+DOID:5082,EFO:0001422,cirrhosis of liver
+CUI:C0029408,EFO:0002506,osteoarthritis
+DOID:5394,EFO:1000496,Prolactin-Producing Pituitary Gland Adenoma
+DOID:893,Orphanet:905,Wilson disease
+CUI:C0263666,EFO:0000557,juvenile dermatomyositis
+CUI:C0027051,EFO:0000612,myocardial infarction
+CUI:C0267975,EFO:1001067,nutritional deficiency disease
+CUI:C0020474,Orphanet:79211,combined hyperlipidemia
+CUI:C0023890,EFO:0001422,cirrhosis of liver
+CUI:C0023473,EFO:0000339,chronic myelogenous leukemia
+CUI:C0085655,EFO:0003063,polymyositis
+DOID:3907,EFO:0000708,squamous cell lung carcinoma
+CUI:C0346040,,in situ melanoma
+DOID:1574,EFO:0009458,alcohol use disorder
+CUI:C0013238,EFO:1000906,dry eye syndrome
+DOID:3429,EFO:0007323,inclusion body myositis
+DOID:1339,Orphanet:124,Blackfan-Diamond anemia
+CUI:C0161750,,overexertion
+CUI:C0018801,EFO:0003144,heart failure
+CUI:C0157917,EFO:0002609,juvenile idiopathic arthritis
+CUI:C0268281,Orphanet:79263,infantile neuronal ceroid lipofuscinosis
+DOID:1596,MONDO:0002050,depressive disorder
+DOID:10941,EFO:0003870,brain aneurysm
+CUI:C0024138,,discoid lupus erythematosus
+DOID:1520,EFO:1001950,colon carcinoma
+DOID:8719,MONDO:0004647,in situ carcinoma
+CUI:C0019196,EFO:0003047,hepatitis C infection
+DOID:4644,Orphanet:304,epidermolysis bullosa simplex
+CUI:C0520679,EFO:0003918,obstructive sleep apnea
