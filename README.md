@@ -14,7 +14,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install()
 
 # Install required BioConductor packages
-BiocManager::install(c("MIGSA", "clusterProfiler", "enrichplot", "supraHex", "ReactomePA", "graph", "Rgraphviz", "MeSH.db"))
+BiocManager::install(c("MIGSA", "clusterProfiler", "enrichplot", "supraHex", "ReactomePA", "graph", "Rgraphviz", "MeSH.db", "BiocStyles"))
 ```
 
 You can install ThETA from GitHub by using the [devtools](https://cran.r-project.org/web/packages/devtools/index.html) package. 
