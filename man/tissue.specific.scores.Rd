@@ -5,13 +5,28 @@
 \alias{list.tissue.specific.scores}
 \title{Compile tissue-specific scores for a given disease.}
 \usage{
-tissue.specific.scores(disease_genes, ppi_network, directed_network = F,
-  tissue_expr_data, dis_relevant_tissues, W, cutoff = 1.6,
-  verbose = FALSE)
+tissue.specific.scores(
+  disease_genes,
+  ppi_network,
+  directed_network = F,
+  tissue_expr_data,
+  dis_relevant_tissues,
+  W,
+  cutoff = 1.6,
+  verbose = FALSE
+)
 
-list.tissue.specific.scores(disease_gene_list, ppi_network,
-  directed_network = F, tissue_expr_data, dis_relevant_tissues, W,
-  cutoff = 1.6, verbose = FALSE, parallel = NULL)
+list.tissue.specific.scores(
+  disease_gene_list,
+  ppi_network,
+  directed_network = F,
+  tissue_expr_data,
+  dis_relevant_tissues,
+  W,
+  cutoff = 1.6,
+  verbose = FALSE,
+  parallel = NULL
+)
 }
 \arguments{
 \item{disease_genes}{character vector containing the IDs of the genes related to a particular disease.

@@ -5,11 +5,27 @@
 \alias{list.dis.rel.tissues}
 \title{Significance Of Disease Modules In Tissue-Specific Interactomes}
 \usage{
-dis.rel.tissues(disease_genes, ppi_network, weighted = FALSE,
-  tissue_expr_data, thr = 1, top = 20, rand = 100, verbose = FALSE)
+dis.rel.tissues(
+  disease_genes,
+  ppi_network,
+  weighted = FALSE,
+  tissue_expr_data,
+  thr = 1,
+  top = 20,
+  rand = 100,
+  verbose = FALSE
+)
 
-list.dis.rel.tissues(disease_gene_list, ppi_network, weighted = FALSE,
-  tissue_expr_data, thr = 1, top = 20, rand = 100, parallel = NULL)
+list.dis.rel.tissues(
+  disease_gene_list,
+  ppi_network,
+  weighted = FALSE,
+  tissue_expr_data,
+  thr = 1,
+  top = 20,
+  rand = 100,
+  parallel = NULL
+)
 }
 \arguments{
 \item{disease_genes}{character vector containing the IDs of the genes related to a particular disease.

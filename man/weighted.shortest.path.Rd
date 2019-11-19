@@ -4,8 +4,16 @@
 \alias{weighted.shortest.path}
 \title{Weighted Shortest Paths compiled between a Gene and Disease-associated Genes}
 \usage{
-weighted.shortest.path(disease_genes, ppi_network, directed_network = F,
-  tissue_expr_data, dis_relevant_tissues, W, cutoff = 1.6, verbose = F)
+weighted.shortest.path(
+  disease_genes,
+  ppi_network,
+  directed_network = F,
+  tissue_expr_data,
+  dis_relevant_tissues,
+  W,
+  cutoff = 1.6,
+  verbose = F
+)
 }
 \arguments{
 \item{disease_genes}{character vector containing the IDs of the genes related to a particular disease.

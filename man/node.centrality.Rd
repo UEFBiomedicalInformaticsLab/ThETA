@@ -4,8 +4,14 @@
 \alias{node.centrality}
 \title{Compile Node Centrality Scores For A Given PPI Network.}
 \usage{
-node.centrality(ppi_network, tissue_expr_data, agg_function = 4,
-  directed_network = F, parallel = NULL, verbose = FALSE)
+node.centrality(
+  ppi_network,
+  tissue_expr_data,
+  agg_function = 4,
+  directed_network = F,
+  parallel = NULL,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{ppi_network}{a matrix or a data frame with at least two columns

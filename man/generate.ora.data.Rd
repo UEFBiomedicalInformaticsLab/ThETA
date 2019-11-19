@@ -4,9 +4,14 @@
 \alias{generate.ora.data}
 \title{Over-Representation Analysis.}
 \usage{
-generate.ora.data(input, databases = c("GO", "KEGG"),
-  orgdb_go = "org.Hs.eg.db", orgdb_kegg = "hsa", apval = 0.01,
-  verbose = TRUE)
+generate.ora.data(
+  input,
+  databases = c("GO", "KEGG"),
+  orgdb_go = "org.Hs.eg.db",
+  orgdb_kegg = "hsa",
+  apval = 0.01,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{input}{a list of charcater vectors representing gene sets.}

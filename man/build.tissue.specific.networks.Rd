@@ -4,10 +4,18 @@
 \alias{build.tissue.specific.networks}
 \title{Compile tissue-specific networks and, within these, set of genes that are relevant for the selected targets.}
 \usage{
-build.tissue.specific.networks(tissue_scores, disease_genes, ppi_network,
-  directed_network = F, tissue_expr_data, top_targets = NULL,
-  rwr_restart = 0.75, rwr_norm = "quantile", rwr_cutoff = 0.001,
-  verbose = FALSE)
+build.tissue.specific.networks(
+  tissue_scores,
+  disease_genes,
+  ppi_network,
+  directed_network = F,
+  tissue_expr_data,
+  top_targets = NULL,
+  rwr_restart = 0.75,
+  rwr_norm = "quantile",
+  rwr_cutoff = 0.001,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{tissue_scores}{a data.frame as the one compiled by \code{get.tissue.specific.scores}}

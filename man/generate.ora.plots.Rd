@@ -4,8 +4,12 @@
 \alias{generate.ora.plots}
 \title{Generate plots for the visualization of ORA results.}
 \usage{
-generate.ora.plots(ora_data, set_plots = c("dotplot", "emapplot",
-  "cnetplot", "upsetplot"), showCategory = 20, font_size = 8)
+generate.ora.plots(
+  ora_data,
+  set_plots = c("dotplot", "emapplot", "cnetplot", "upsetplot"),
+  showCategory = 20,
+  font_size = 8
+)
 }
 \arguments{
 \item{ora_data}{a list of ORA results.}

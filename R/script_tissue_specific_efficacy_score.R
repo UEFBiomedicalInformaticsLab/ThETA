@@ -422,6 +422,11 @@ novelty.plots <- function(list_genes, gene_id = 'ENTREZID', orgdb = NULL, pubmed
 #'Possible values are: \code{kegg}, \code{BP}, \code{MF} and \code{CC}. Defaults to \code{kegg}.
 #'@param verbose logical indicating whether the messages will be displayed or not in the screen.
 #'@importFrom AnnotationDbi mapIds
+#'@importFrom visNetwork visNetwork
+#'@importFrom visNetwork visIgraphLayout
+#'@importFrom visNetwork visGroups
+#'@importFrom visNetwork visLegend
+#'@importFrom visNetwork visEvents
 visualize.graph <- function(tissue_scores, disease_genes, ppi_network, directed_network = FALSE,
                             tissue_expr_data, top_target = NULL, db='kegg', verbose = FALSE){
   if(is.null(top_target)) stop('Please specifiy a set of targets (ENTREZ ids)!')
@@ -513,18 +518,18 @@ visualize.graph <- function(tissue_scores, disease_genes, ppi_network, directed_
         node$shape[gp=='target gene'] <- 'triangle'
         node$shape[gp=='disease gene'] <- 'star'
         visNetwork::visNetwork(node, edge, height = "1500px", width = "500%") %>%
-          visGroups(groupname = "target gene", color = list(background = "skyblue", border = "deepskyblue")) %>%
-          visGroups(groupname = "disease gene", color = list(background = "lightcoral", border = "red")) %>%
-          visGroups(groupname = "bridge gene", shape="dot") %>%
-          visLegend(addNodes=list(
+          visNetwork::visGroups(groupname = "target gene", color = list(background = "skyblue", border = "deepskyblue")) %>%
+          visNetwork::visGroups(groupname = "disease gene", color = list(background = "lightcoral", border = "red")) %>%
+          visNetwork::visGroups(groupname = "bridge gene", shape="dot") %>%
+          visNetwork::visLegend(addNodes=list(
             list(label = "disease gene", shape = "star",
                  color = list(background = "lightcoral", border = "red")),
             list(label = "target gene", shape = "triangle",
                  color = list(background = "skyblue", border = "deepskyblue")),
             list(label = "bridge gene", shape = "dot")),
             useGroups = FALSE,width=0.1) %>%
-          visIgraphLayout(layout = "layout_with_sugiyama") %>%
-          visEvents(select = "function(nodes) {
+          visNetwork::visIgraphLayout(layout = "layout_with_sugiyama") %>%
+          visNetwork::visEvents(select = "function(nodes) {
                     Shiny.onInputChange('current_node_id', nodes.nodes);
                     ;}")
     })

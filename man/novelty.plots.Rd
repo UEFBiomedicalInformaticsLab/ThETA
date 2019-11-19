@@ -4,8 +4,13 @@
 \alias{novelty.plots}
 \title{Generate PubMed Central Trend plots.}
 \usage{
-novelty.plots(list_genes, gene_id = "ENTREZID", orgdb = NULL,
-  pubmed = c(2010, 2019), font_size = 8)
+novelty.plots(
+  list_genes,
+  gene_id = "ENTREZID",
+  orgdb = NULL,
+  pubmed = c(2010, 2019),
+  font_size = 8
+)
 }
 \arguments{
 \item{list_genes}{a list of gene names.}
