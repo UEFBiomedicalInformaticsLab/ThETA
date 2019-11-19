@@ -314,7 +314,7 @@ list.dis.rel.tissues <-
       `%dopar%` <- foreach::`%dopar%`
       dis_rlvnt_tiss <-
         foreach::foreach(i = disease_gene_list, .export = 'get.disease.relevant.tissues') %dopar%
-        get.disease.relevant.tissues(i, ppi_network, weighted, tissue_expr_data, thr, top, rand)
+        ThETA::get.disease.relevant.tissues(i, ppi_network, weighted, tissue_expr_data, thr, top, rand)
       snow::stopCluster(cl)
     }
     else {
@@ -322,7 +322,7 @@ list.dis.rel.tissues <-
       dis_rlvnt_tiss <- list()
       for (d in disease_gene_list) {
         dis_rlvnt_tiss[[length(dis_rlvnt_tiss) + 1]] <-
-          get.disease.relevant.tissues(d, ppi_network, weighted, tissue_expr_data, thr, top, rand)
+          ThETA::get.disease.relevant.tissues(d, ppi_network, weighted, tissue_expr_data, thr, top, rand)
       }
     }
     names(dis_rlvnt_tiss) <- names(disease_gene_list)
@@ -365,6 +365,7 @@ visualize.graph <-
            top_targets = NULL,
            db = 'kegg',
            verbose = FALSE) {
+    library(shiny)
     if (is.null(top_targets))
       stop('Please specifiy a set of targets (ENTREZ ids)!')
     if (is.null(rownames(tissue_expr_data)) |
@@ -488,16 +489,16 @@ visualize.graph <-
           node$shape <-
             c("circle", "star", "diamond")[as.numeric(as.factor(gp))]
           visNetwork::visNetwork(node, edge, height = "1500px", width = "500%") %>%
-            visGroups(
+            visNetwork::visGroups(
               groupname = "target gene",
               color = list(background = "skyblue", border = "deepskyblue")
             ) %>%
-            visGroups(
+            visNetwork::visGroups(
               groupname = "disease gene",
               color = list(background = "lightcoral", border = "red")
             ) %>%
-            visGroups(groupname = "bridge gene", shape = "circle") %>%
-            visLegend(
+            visNetwork::visGroups(groupname = "bridge gene", shape = "circle") %>%
+            visNetwork::visLegend(
               addNodes = list(
                 list(
                   label = "disease gene",
@@ -514,8 +515,8 @@ visualize.graph <-
               useGroups = FALSE,
               width = 0.1
             ) %>%
-            visLayout(hierarchical = TRUE) %>%  # visLayout(randomSeed = 123)
-            visEvents(select = "function(nodes) {
+            visNetwork::visLayout(hierarchical = TRUE) %>%  # visLayout(randomSeed = 123)
+            visNetwork::visEvents(select = "function(nodes) {
                     Shiny.onInputChange('current_node_id', nodes.nodes);
                     ;}")
         })
