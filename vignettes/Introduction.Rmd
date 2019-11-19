@@ -121,7 +121,7 @@ T2DM_rel_tissue_scores = disease_tissue_zscores$z[which(rownames(disease_tissue_
 3. A tissue-specific efficacy (TSE) score is then estimated for all genes that are expressed in the tissues that are relevant for T2D. It should be noted that the following script is computer-intensive. Indeed, we specified only two genes in input. However, it is highly recommended to use the whole set of T2D-relevant genes.  
 
 ```{r, t2d_sco, cache.lazy = TRUE, echo = TRUE, results = 'hide'}
-T2DM_Tscores <- tissue.specific.scores(T2DM_genes$entrez[:2], 
+T2DM_Tscores <- tissue.specific.scores(T2DM_genes$entrez, 
                                         ppi_network = ppi_strdb_700, 
                                         directed_network = FALSE, 
                                         tissue_expr_data = gtexv7_zscore,
