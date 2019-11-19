@@ -118,10 +118,10 @@ T2DM_genes = dis_vrnts[[which(names(dis_vrnts) == "EFO:0001360")]]
 T2DM_rel_tissue_scores = disease_tissue_zscores$z[which(rownames(disease_tissue_zscores$z) == "EFO:0001360"),]
 ```
 
-3. A tissue-specific efficacy (TSE) score is then estimated for all genes that are expressed in the tissues that are relevant for T2D.
+3.  A tissue-specific efficacy (TSE) score is then estimated for all genes that are expressed in the tissues that are relevant for T2D. It should be noted that the following script is computer-intensive. Indeed, we specified only two genes in input. However, it is highly recommended to use the whole set of T2D-relevant genes.  
 
 ```{r, t2d_sco, cache.lazy = TRUE, echo = TRUE, results = 'hide'}
-T2DM_Tscores <- tissue.specific.scores(T2DM_genes$entrez, 
+T2DM_Tscores <- tissue.specific.scores(T2DM_genes$entrez[1:2], 
                                         ppi_network = ppi_strdb_700, 
                                         directed_network = FALSE, 
                                         tissue_expr_data = gtexv7_zscore,
@@ -211,9 +211,9 @@ The following code shows how to:
 First, DO ids or CUIs are replaced with EFO ids. 
 
 ```{r, load_conf, cache.lazy = TRUE, echo = TRUE}
-enrichr_to_efo <- read.csv(system.file("conversion_enrichr_efo.csv", 
+enrichr_to_efo <- read.csv(system.file("extdata", "conversion_enrichr_efo.csv", 
                                         package = "ThETA"), row.names = 1,
-                            stringsAsFactors = F)
+                            stringsAsFactors = FALSE)
 modulation_scores$disease.id <- enrichr_to_efo[modulation_scores$disease.id,'disease.id']
 ```
 

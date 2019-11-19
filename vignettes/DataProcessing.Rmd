@@ -139,7 +139,7 @@ library(CePa)
 Then, the function *read.gct()* is utilized to read the GTEx file.
 
 ```{r, load_gtex, cache.lazy = TRUE, echo = TRUE, eval = FALSE}
-gtexv7_median_tpm <- CePa::read.gct('../data/GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_median_tpm.gct.gz')
+gtexv7_median_tpm <- CePa::read.gct(system.file("extdata", 'GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_median_tpm.gct.gz', package="ThETA"))
 colnames(gtexv7_median_tpm) <- sub("\\.$",'',colnames(gtexv7_median_tpm))
 colnames(gtexv7_median_tpm) <- gsub("\\.+",'_',colnames(gtexv7_median_tpm)) 
 ```
@@ -210,7 +210,7 @@ if("ontologyIndex" %in% rownames(installed.packages()) == FALSE) {install.packag
 library(ontologyIndex)
 
 # select the genes associated with each disease annotated in the OBO file
-efo.OBO <- get_OBO('../data/efo_feb2019.obo', extract_tags = "everything") 
+efo.OBO <- get_OBO(system.file("extdata", 'efo_feb2019.obo', package="ThETA"), extract_tags = "everything") 
 # remove the tag "EFO:" from each id
 efo_ids <- gsub('EFO:','', grep('EFO:', efo.OBO$id, value = T)) 
 # select gene-disease associations from DisGeNET
