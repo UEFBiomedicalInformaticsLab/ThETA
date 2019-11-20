@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Mario Failli, Jussi Pananen and Vittorio Fortino" />
+
+<meta name="date" content="2019-11-20" />
+
+<title>Pre-processing needed to compile the available .rda files</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Pre-processing needed to compile the available .rda files</h1>
+<h4 class="author">Mario Failli, Jussi Pananen and Vittorio Fortino</h4>
+<h4 class="date">2019-11-20</h4>
+
+
+
+<style type="text/css">
+
+body{ /* Normal  */
+      font-size: 12px;
+  }
+td {  /* Table  */
+  font-size: 10px;
+}
+h1.title {
+  font-size: 30px;
+  color: DarkRed;
+}
+h1 { /* Header 1 */
+  font-size: 24px;
+  color: DarkBlue;
+}
+h2 { /* Header 2 */
+    font-size: 20px;
+  color: DarkBlue;
+}
+h3 { /* Header 3 */
+  font-size: 15px;
+  font-family: "Times New Roman", Times, serif;
+  color: DarkBlue;
+}
+code.r{ /* Code block */
+    font-size: 10px;
+}
+pre { /* Code block - determines code spacing between lines */
+    font-size: 10px;
+}
+</style>
+<div id="estimating-disease-relevant-genes-and-tissues-before-compiling-the-tissue-specific-efficacy-scores" class="section level2">
+<h2>Estimating disease relevant genes and tissues before compiling the tissue-specific efficacy scores</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(ThETA)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">data</span>(gtexv7_zscore)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">data</span>(ppi_strdb_<span class="dv">700</span>)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">data</span>(dis_vrnts)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">data</span>(disease_tissue_zscores)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">data</span>(centrality_score)</a></code></pre></div>
+<p>The following code shows how to retrieve disease-associated genes with a specific confident score (see www.disgenet.org/help for more details) and how to compile z-scores for disease-tissue pairs.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="cf">if</span>(<span class="st">&quot;AnnotationDbi&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">rownames</span>(<span class="kw">installed.packages</span>()) <span class="op">==</span><span class="st"> </span><span class="ot">FALSE</span>) {</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">&quot;BiocManager&quot;</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">    <span class="kw">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>)</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">  BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">&quot;AnnotationDbi&quot;</span>)}</a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="cf">if</span>(<span class="st">&quot;MeSH.db&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">rownames</span>(<span class="kw">installed.packages</span>()) <span class="op">==</span><span class="st"> </span><span class="ot">FALSE</span>) {</a>
+<a class="sourceLine" id="cb2-6" data-line-number="6">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">&quot;BiocManager&quot;</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb2-7" data-line-number="7">    <span class="kw">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>)</a>
+<a class="sourceLine" id="cb2-8" data-line-number="8">  BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">&quot;MeSH.db&quot;</span>)}</a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="kw">library</span>(MeSH.db)</a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="kw">library</span>(AnnotationDbi)</a></code></pre></div>
+<p>First, the MeshID corresponding to T2DM are retrieved.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">T2DM_mesh &lt;-<span class="st"> </span>AnnotationDbi<span class="op">::</span><span class="kw">select</span>(MeSH.db,<span class="dt">keys =</span> <span class="st">'Diabetes Mellitus, Type 2'</span>, </a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">                                    <span class="dt">columns =</span> <span class="kw">c</span>(<span class="st">&quot;MESHID&quot;</span>,<span class="st">&quot;MESHTERM&quot;</span>),</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">                                    <span class="dt">keytype =</span> <span class="st">&quot;MESHTERM&quot;</span>)</a></code></pre></div>
+<p>Then, variant genes associated to T2DM are collected from DisGeNET.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">library</span>(RCurl)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">library</span>(XML)</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">T2DM_genes &lt;-<span class="st"> </span><span class="kw">disease.vrnts</span>(T2DM_mesh<span class="op">$</span>MESHID, <span class="dt">id_type =</span> <span class="st">'mesh'</span>, <span class="dt">min_score =</span> <span class="fl">0.6</span>, <span class="dt">curated =</span> T)</a></code></pre></div>
+<p>Once the set of disease-relevant genes is downloaded, then the corresponding set of disease-relevant tissues can be determined (Failli et al. 2019). The parameter <em>top</em> can be used to extend the initial set of disease-relevant genes. It indicates how many genes closely related to the disease-genes must be added.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">T2DM_tiss_zscore &lt;-<span class="st"> </span><span class="kw">dis.rel.tissues</span>(<span class="dt">disease_genes =</span> T2DM_genes<span class="op">$</span>entrez, </a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">                                      <span class="dt">ppi_network =</span> ppi_strdb_<span class="dv">700</span>, <span class="dt">weighted =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">                                      <span class="dt">tissue_expr_data =</span> gtexv7_zscore, </a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">                                      <span class="dt">thr =</span> <span class="dv">1</span>, <span class="dt">top=</span><span class="dv">0</span>, <span class="dt">rand =</span> <span class="dv">1000</span>, <span class="dt">verbose =</span> T) <span class="co"># rand = 10000 is highly recommended</span></a></code></pre></div>
+<p>The previous code generates the following table of z-scores, indicating significant associations between disease and tissues in GTEx.</p>
+<p>After compiling scoring disease-tissue associations, the user can compile the tissue-specific efficacy scores as follow.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="cf">if</span>(<span class="st">&quot;magrittr&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">rownames</span>(<span class="kw">installed.packages</span>()) <span class="op">==</span><span class="st"> </span><span class="ot">FALSE</span>) {<span class="kw">install.packages</span>(<span class="st">&quot;magrittr&quot;</span>)}</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">library</span>(magrittr)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">T2DM_scores &lt;-<span class="st"> </span><span class="kw">tissue.specific.scores</span>(T2DM_genes<span class="op">$</span>entrez, </a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">                                        <span class="dt">ppi_network =</span> ppi_strdb_<span class="dv">700</span>, </a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">                                        <span class="dt">directed_network =</span> F, </a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">                                        <span class="dt">tissue_expr_data =</span> gtexv7_zscore,</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">                                        <span class="dt">dis_relevant_tissues =</span> T2DM_tiss_zscore<span class="op">$</span>z <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="st">                                                             `</span><span class="dt">names&lt;-</span><span class="st">`</span>(<span class="kw">rownames</span>(T2DM_tiss_zscore)),</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">                                        <span class="dt">W =</span> centrality_score<span class="op">$</span>borda.disc, <span class="dt">cutoff =</span> <span class="dv">5</span>, <span class="dt">verbose =</span> T)</a></code></pre></div>
+<div id="the-following-sections-show-how-to-build-from-scratch-the-pre-compiled-.rda-files-needed-for-the-tissue-specific-score" class="section level4">
+<h4>The following sections show how to build from scratch the pre-compiled .rda files needed for the tissue specific score</h4>
+<p><strong>Collecting gene expression data per tissue from GTEx</strong></p>
+<p>In order to create the .rda file <em>gtexv7_zscore</em> the following R packages need to be installed.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="cf">if</span>(<span class="st">&quot;CePa&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">rownames</span>(<span class="kw">installed.packages</span>()) <span class="op">==</span><span class="st"> </span><span class="ot">FALSE</span>) {<span class="kw">install.packages</span>(<span class="st">&quot;CePa&quot;</span>)}</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="cf">if</span>(<span class="st">&quot;grex&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">rownames</span>(<span class="kw">installed.packages</span>()) <span class="op">==</span><span class="st"> </span><span class="ot">FALSE</span>) {<span class="kw">install.packages</span>(<span class="st">&quot;grex&quot;</span>)}</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="kw">library</span>(grex)</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw">library</span>(CePa)</a></code></pre></div>
+<p>Then, the function <em>read.gct()</em> is utilized to read the GTEx file.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">gtexv7_median_tpm &lt;-<span class="st"> </span>CePa<span class="op">::</span><span class="kw">read.gct</span>(<span class="st">'../data/GTEx_Analysis_2016-01-15_v7_RNASeQCv1.1.8_gene_median_tpm.gct.gz'</span>)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">colnames</span>(gtexv7_median_tpm) &lt;-<span class="st"> </span><span class="kw">sub</span>(<span class="st">&quot;</span><span class="ch">\\</span><span class="st">.$&quot;</span>,<span class="st">''</span>,<span class="kw">colnames</span>(gtexv7_median_tpm))</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">colnames</span>(gtexv7_median_tpm) &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="st">&quot;</span><span class="ch">\\</span><span class="st">.+&quot;</span>,<span class="st">'_'</span>,<span class="kw">colnames</span>(gtexv7_median_tpm)) </a></code></pre></div>
+<p>The TPM values are log-transformed and then converted to z-scores by using the <em>tissue.exp</em> function.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">gtexv7_zscore &lt;-<span class="st"> </span><span class="kw">tissue.expr</span>(<span class="kw">log2</span>(gtexv7_median_tpm<span class="op">+</span><span class="dv">1</span>))             <span class="co"># to convert exp vals to z-scores</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw">rownames</span>(gtexv7_zscore) &lt;-<span class="st"> </span>grex<span class="op">::</span><span class="kw">cleanid</span>(<span class="kw">rownames</span>(gtexv7_zscore))   <span class="co"># to produce Ensembl IDs.</span></a></code></pre></div>
+<p>Moreover, all the Ensembl IDs are mapped to Entrez Gene ID.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">gtexv7_gene_ann &lt;-<span class="st"> </span>grex<span class="op">::</span><span class="kw">grex</span>(<span class="kw">rownames</span>(gtexv7_zscore)) </a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">gtexv7_gene_ann &lt;-<span class="st"> </span>gtexv7_gene_ann[<span class="op">!</span><span class="kw">is.na</span>(gtexv7_gene_ann<span class="op">$</span>entrez_id),] </a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">gtexv7_zscore &lt;-<span class="st"> </span>gtexv7_zscore[gtexv7_gene_ann<span class="op">$</span>ensembl_id,]</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="kw">rownames</span>(gtexv7_zscore) &lt;-<span class="st"> </span>gtexv7_gene_ann<span class="op">$</span>entrez_id</a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#save(gtexv7_zscore,file='gtexv7_zscore.rda')</span></a></code></pre></div>
+<p><strong>Defining a PPI network from STRINGDB</strong></p>
+<p>In order to create the .rda file <em>ppi_strdb_700</em> the following R packages need to be installed.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="cf">if</span>(<span class="st">&quot;STRINGdb&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">rownames</span>(<span class="kw">installed.packages</span>()) <span class="op">==</span><span class="st"> </span><span class="ot">FALSE</span>) {</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">  <span class="cf">if</span> (<span class="op">!</span><span class="kw">requireNamespace</span>(<span class="st">&quot;BiocManager&quot;</span>, <span class="dt">quietly =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">    <span class="kw">install.packages</span>(<span class="st">&quot;BiocManager&quot;</span>)</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">  BiocManager<span class="op">::</span><span class="kw">install</span>(<span class="st">&quot;STRINGdb&quot;</span>)}</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="cf">if</span>(<span class="st">&quot;igraph&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">rownames</span>(<span class="kw">installed.packages</span>()) <span class="op">==</span><span class="st"> </span><span class="ot">FALSE</span>) {<span class="kw">install.packages</span>(<span class="st">&quot;igraph&quot;</span>)}</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="kw">library</span>(STRINGdb)</a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="kw">library</span>(igraph)</a></code></pre></div>
+<p>First, the Human Protein-Protein interaction network is selected. Then, genes that are annotated in GTEx and connections (or edges) with a score greater than or equal to 700 are kept.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">string_db &lt;-<span class="st"> </span>STRINGdb<span class="op">$</span><span class="kw">new</span>(<span class="dt">version=</span><span class="st">&quot;10&quot;</span>, <span class="dt">species=</span><span class="dv">9606</span>)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">gtexv7_mapped &lt;-<span class="st"> </span>string_db<span class="op">$</span><span class="kw">map</span>(<span class="dt">my_data_frame =</span> gtexv7_gene_ann, <span class="dt">my_data_frame_id_col_names=</span><span class="st">'entrez_id'</span>, <span class="dt">removeUnmappedRows=</span>T)</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">string_inter &lt;-<span class="st"> </span>string_db<span class="op">$</span><span class="kw">get_interactions</span>(gtexv7_mapped<span class="op">$</span>STRING_id)</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">string_inter &lt;-<span class="st"> </span>string_inter[string_inter<span class="op">$</span>combined_score<span class="op">&gt;=</span><span class="dv">700</span>,] <span class="co"># to select connections with minimum STRING combined score &gt;= 700</span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">idx_from &lt;-<span class="st"> </span><span class="kw">match</span>(<span class="dt">x =</span> string_inter<span class="op">$</span>from, <span class="dt">table =</span> gtexv7_mapped<span class="op">$</span>STRING_id)</a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">idx_to &lt;-<span class="st"> </span><span class="kw">match</span>(<span class="dt">x =</span> string_inter<span class="op">$</span>to, <span class="dt">table =</span> gtexv7_mapped<span class="op">$</span>STRING_id)</a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">ppi_strdb_<span class="dv">700</span> &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">node1=</span>gtexv7_mapped<span class="op">$</span>entrez_id[idx_from], <span class="dt">node2=</span>gtexv7_mapped<span class="op">$</span>entrez_id[idx_to], <span class="dt">weight=</span>string_inter<span class="op">$</span>combined_score<span class="op">/</span><span class="dv">1000</span>,<span class="dt">stringsAsFactors =</span> F)</a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#save(ppi_strdb_700,file='ppi_strdb_700.rda')</span></a></code></pre></div>
+<p>The PPI compiled from STRINGdb will be a data frame containing a symbolic edge list in the first two columns and connection scores in the third column.</p>
+<p><strong>Compiling disease-tissue associations</strong></p>
+<p>In order to make the .rda files <em>dis_vrnts</em> and <em>disease_tissue_zscores</em> the following R package <em>ontologyIndex</em> need to be installed. Then, the z-score is compiled for all possible disease-tissue pairs.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="cf">if</span>(<span class="st">&quot;ontologyIndex&quot;</span> <span class="op">%in%</span><span class="st"> </span><span class="kw">rownames</span>(<span class="kw">installed.packages</span>()) <span class="op">==</span><span class="st"> </span><span class="ot">FALSE</span>) {<span class="kw">install.packages</span>(<span class="st">&quot;ontologyIndex&quot;</span>)}</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">library</span>(ontologyIndex)</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb13-4" data-line-number="4"><span class="co"># select the genes associated with each disease annotated in the OBO file</span></a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">efo.OBO &lt;-<span class="st"> </span><span class="kw">get_OBO</span>(<span class="st">'../data/efo_feb2019.obo'</span>, <span class="dt">extract_tags =</span> <span class="st">&quot;everything&quot;</span>) </a>
+<a class="sourceLine" id="cb13-6" data-line-number="6"><span class="co"># remove the tag &quot;EFO:&quot; from each id</span></a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">efo_ids &lt;-<span class="st"> </span><span class="kw">gsub</span>(<span class="st">'EFO:'</span>,<span class="st">''</span>, <span class="kw">grep</span>(<span class="st">'EFO:'</span>, efo.OBO<span class="op">$</span>id, <span class="dt">value =</span> T)) </a>
+<a class="sourceLine" id="cb13-8" data-line-number="8"><span class="co"># select gene-disease associations from DisGeNET</span></a>
+<a class="sourceLine" id="cb13-9" data-line-number="9">dis_vrnts &lt;-<span class="st"> </span><span class="kw">sapply</span>(efo_ids, <span class="cf">function</span>(x) <span class="kw">disease.vrnts</span>(x, <span class="dt">id_type=</span><span class="st">'efo'</span>,</a>
+<a class="sourceLine" id="cb13-10" data-line-number="10">                                                       <span class="dt">min_score=</span><span class="fl">0.6</span>,</a>
+<a class="sourceLine" id="cb13-11" data-line-number="11">                                                       <span class="dt">curated=</span>F), <span class="dt">simplify =</span> F)  </a>
+<a class="sourceLine" id="cb13-12" data-line-number="12"><span class="co"># define the toal set of genes from the PPI</span></a>
+<a class="sourceLine" id="cb13-13" data-line-number="13">all_ppi_genes &lt;-<span class="st"> </span><span class="kw">unique</span>(<span class="kw">as.character</span>(<span class="kw">unlist</span>(ppi_strdb_<span class="dv">700</span>[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>]))) </a>
+<a class="sourceLine" id="cb13-14" data-line-number="14"><span class="co"># select the diseases with at least 5 (associated) genes</span></a>
+<a class="sourceLine" id="cb13-15" data-line-number="15">dis_vrnts &lt;-<span class="st">  </span>dis_vrnts[<span class="kw">sapply</span>(dis_vrnts, <span class="cf">function</span>(x)  </a>
+<a class="sourceLine" id="cb13-16" data-line-number="16">                        <span class="kw">length</span>(<span class="kw">intersect</span>(x<span class="op">$</span>entrez,all_ppi_genes)))<span class="op">&gt;=</span><span class="dv">5</span>] </a>
+<a class="sourceLine" id="cb13-17" data-line-number="17"><span class="co"># comiple the disease relevant tissues for each selected disease</span></a>
+<a class="sourceLine" id="cb13-18" data-line-number="18">disease_tissue_zscores &lt;-<span class="st"> </span><span class="kw">list.dis.rel.tissues</span>(<span class="dt">disease_gene_list =</span> <span class="kw">sapply</span>(dis_vrnts,<span class="st">'[['</span>,<span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb13-19" data-line-number="19">                                               <span class="dt">ppi_network =</span> ppi_strdb_<span class="dv">700</span>, </a>
+<a class="sourceLine" id="cb13-20" data-line-number="20">                                               <span class="dt">weighted =</span> <span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb13-21" data-line-number="21">                                               <span class="dt">tissue_expr_data =</span> gtexv7_zscore, <span class="dt">thr =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb13-22" data-line-number="22">                                               <span class="dt">top =</span> <span class="dv">0</span>, <span class="dt">rand =</span> <span class="dv">10000</span>, <span class="dt">parallel =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb13-23" data-line-number="23"><span class="co">#save(dis_vrnts, file='dis_vrnts.rda')</span></a>
+<a class="sourceLine" id="cb13-24" data-line-number="24"><span class="co">#save(disease_tissue_zscores, file='disease_tissue_zscores.rda')</span></a></code></pre></div>
+<p><strong>Compiling node centrality scores</strong></p>
+<p>The .rda file <em>centrality_score</em> can be compiled by using the R function <em>node.centrality</em>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">centrality_score &lt;-<span class="st"> </span><span class="kw">node.centrality</span>(<span class="dt">ppi_network =</span> ppi_strdb_<span class="dv">700</span>, </a>
+<a class="sourceLine" id="cb14-2" data-line-number="2">                                    <span class="dt">tissue_expr_data =</span> gtexv7_zscore, </a>
+<a class="sourceLine" id="cb14-3" data-line-number="3">                                    <span class="dt">agg_function =</span> <span class="dv">4</span>, <span class="dt">directed_network=</span>F, </a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">                                    <span class="dt">parallel =</span> <span class="dv">10</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#save(centrality_score,file = 'centrality_score.rda')</span></a></code></pre></div>
+<p><strong>Compiling tissue-specifc efficacy scores for all target-disease associations</strong></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">idx &lt;-<span class="st"> </span><span class="kw">apply</span>(disease_tissue_zscores<span class="op">$</span>z,<span class="dv">1</span>,<span class="cf">function</span>(x) <span class="kw">any</span>(x <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.6</span>))</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">tissue_score &lt;-<span class="st"> </span><span class="kw">list.tissue.specific.scores</span>(<span class="dt">disease_gene_list =</span> <span class="kw">sapply</span>(dis_vrnts[idx],<span class="st">'[['</span>,<span class="dv">1</span>) , </a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">                                            <span class="dt">ppi_network =</span> ppi_strdb_<span class="dv">700</span>, <span class="dt">directed_network =</span> F,</a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">                                            <span class="dt">tissue_expr_data =</span> gtexv7_zscore,  </a>
+<a class="sourceLine" id="cb15-6" data-line-number="6">                                            <span class="dt">dis_relevant_tissues =</span> disease_tissue_zscores<span class="op">$</span>z[idx,], </a>
+<a class="sourceLine" id="cb15-7" data-line-number="7">                                            <span class="dt">W =</span> centrality_score<span class="op">$</span>borda.disc, <span class="dt">cutoff =</span> <span class="fl">1.6</span>,</a>
+<a class="sourceLine" id="cb15-8" data-line-number="8">                                            <span class="dt">verbose =</span> <span class="ot">FALSE</span>, <span class="dt">parallel =</span> <span class="dv">10</span>)</a></code></pre></div>
+</div>
+<div id="how-to-format-averaged-tissue-specifc-efficacy-scores" class="section level3">
+<h3>How to format averaged tissue-specifc efficacy scores</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">avg_tissue_score &lt;-<span class="st"> </span><span class="kw">sapply</span>(tissue_score,<span class="st">'[['</span>,<span class="st">'avg_tissue_score'</span>) <span class="op">%&gt;%</span><span class="st"> `</span><span class="dt">rownames&lt;-</span><span class="st">`</span>(<span class="kw">rownames</span>(tissue_score[[<span class="dv">1</span>]]))</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2">avg_tissue_score &lt;-<span class="st"> </span>reshape2<span class="op">::</span><span class="kw">melt</span>(avg_tissue_score)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3">avg_tissue_score[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">lapply</span>(avg_tissue_score[,<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>],  as.character)</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="kw">colnames</span>(avg_tissue_score) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">'target.entrez'</span>,<span class="st">'disease.id'</span>,<span class="st">'avg_tissue.score'</span>)</a>
+<a class="sourceLine" id="cb16-5" data-line-number="5">annotation &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">disease.id=</span>efo.OBO<span class="op">$</span>id,<span class="dt">disease.name=</span>efo.OBO<span class="op">$</span>name)</a>
+<a class="sourceLine" id="cb16-6" data-line-number="6"><span class="kw">options</span>(<span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb16-7" data-line-number="7">avg_tissue_score &lt;-<span class="st"> </span><span class="kw">merge</span>(annotation,avg_tissue_score,<span class="dt">by=</span><span class="st">'disease.id'</span>,<span class="dt">all.y=</span>T)</a></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
