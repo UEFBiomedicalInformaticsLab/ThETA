@@ -31,6 +31,7 @@ tissue.expr <- function(tissue_expr_data){
 #'@import RCurl
 #'@import XML
 #'@import SPARQL
+#'@importFrom utils tail
 disease.vrnts <- function(x, id_type='efo', min_score=0, curated=F){
   endpoint<-"http://rdf.disgenet.org/sparql/"
   partI<-'PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -87,8 +88,8 @@ disease.vrnts <- function(x, id_type='efo', min_score=0, curated=F){
   res<-SPARQL::SPARQL(endpoint,query)$results
 
   if(nrow(res !=0)){
-    etz <- sapply(strsplit(res$gene,'/'),function(x)gsub('>','',tail(x,1)))
-    symb <- sapply(strsplit(res$GeneSymbol,'/'),function(x)gsub('>','',tail(x,1)))
+    etz <- sapply(strsplit(res$gene,'/'),function(x)gsub('>','',utils::tail(x,1)))
+    symb <- sapply(strsplit(res$GeneSymbol,'/'),function(x)gsub('>','',utils::tail(x,1)))
     scr <- res$score
     df <- data.frame(entrez=etz,symbol=symb,score=scr,stringsAsFactors = F)
     df <- df[!duplicated(df),]
@@ -224,15 +225,15 @@ list.dis.rel.tissues <- function(disease_gene_list, ppi_network, weighted = FALS
     cl <- snow::makeCluster(parallel)
     doParallel::registerDoParallel(cl)
     `%dopar%` <- foreach::`%dopar%`
-    dis_rlvnt_tiss <- foreach::foreach(i=disease_gene_list, .export = 'get.disease.relevant.tissues') %dopar%
-      get.disease.relevant.tissues(i, ppi_network, weighted, tissue_expr_data, thr, top, rand)
+    dis_rlvnt_tiss <- foreach::foreach(i=disease_gene_list, .export = 'dis.rel.tissues') %dopar%
+      dis.rel.tissues(i, ppi_network, weighted, tissue_expr_data, thr, top, rand)
     snow::stopCluster(cl)
   }
   else {
     warning("A parallel computation is highly recommended",immediate. = T)
     dis_rlvnt_tiss <- list()
     for(d in disease_gene_list) {
-      dis_rlvnt_tiss[[length(dis_rlvnt_tiss)+1]] <- get.disease.relevant.tissues(d, ppi_network, weighted, tissue_expr_data, thr, top, rand)
+      dis_rlvnt_tiss[[length(dis_rlvnt_tiss)+1]] <- dis.rel.tissues(d, ppi_network, weighted, tissue_expr_data, thr, top, rand)
     }
   }
   names(dis_rlvnt_tiss) <- names(disease_gene_list)
@@ -240,3 +241,150 @@ list.dis.rel.tissues <- function(disease_gene_list, ppi_network, weighted = FALS
   for (i in 1:length(df)) colnames(df[[i]]) <- colnames(tissue_expr_data)
   return(df)
 }
+
+#'Interactive visualization of tissue-specific networks.
+#'
+#'It uses visNetwork to build a neteworks showing all short pathways connecting disease genes with putative drug targets.
+#'
+#'@param tissue_scores a data.frame as the one compiled by \code{get.tissue.specific.scores}
+#'@param disease_genes character vector containing the IDs of the genes related to a particular disease.
+#'Gene IDs are expected to match with those provided in \code{ppi_network} and \code{tissue_expr_data}.
+#'@param ppi_network a matrix or a data frame with at least two columns
+#'reporting the ppi connections (or edges). Each line corresponds to a direct interaction.
+#'Columns give the gene IDs of the two interacting proteins.
+#'@param directed_network logical indicating whether the PPI is directed.
+#'@param tissue_expr_data a numeric matrix or data frame indicating expression significances
+#'in the form of Z-scores. Columns are tissues and rows are genes; colnames and rownames must be provided.
+#'Gene IDs are expected to match with those provided in \code{ppi_network}.
+#'@param top_targets character vector indicating a list of ENTREZ id to be used for the slection of the shortest paths.
+#'@param db character indicating the database to consider for enrichment analysis.
+#'Possible values are: \code{kegg}, \code{BP}, \code{MF} and \code{CC}. Defaults to \code{kegg}.
+#'@param verbose logical indicating whether the messages will be displayed or not in the screen.
+#'@export
+#'@import igraph
+#'@import visNetwork
+#'@importFrom shiny shinyApp
+#'@importFrom shiny renderTable
+#'@importFrom shiny validate
+#'@importFrom shiny fluidPage
+#'@importFrom shiny fluidRow
+#'@importFrom shiny fluidRow
+#'@importFrom clusterProfiler enrichKEGG
+#'@importFrom clusterProfiler enrichGO
+#'@importFrom scales rescale
+visualize.graph <- function(tissue_scores, disease_genes, ppi_network, directed_network = FALSE,
+                            tissue_expr_data, top_targets = NULL, db='kegg',verbose = FALSE){
+  
+  if(is.null(top_targets)) stop('Please specifiy a set of targets (ENTREZ ids)!')
+  if(is.null(rownames(tissue_expr_data))|is.null(colnames(tissue_expr_data))){
+    stop('Both colnames and rownames for tissue_expr_data must be provided.')}
+  for(i in 1:2) ppi_network[,i] <- as.character(ppi_network[,i])
+  ppi_network <- ppi_network[!duplicated(ppi_network[,1:2]),]
+  ppi_network_size <- nrow(ppi_network)
+  if(directed_network) idx <- ppi_network[,1]%in%rownames(tissue_expr_data)
+  else idx <- ppi_network[,1]%in%rownames(tissue_expr_data) & ppi_network[,2]%in%rownames(tissue_expr_data)
+  ppi_network <- ppi_network[idx,]
+  if(nrow(ppi_network)==0) stop('No corresponding IDs between ppi_network and tissue_expr_data.')
+  else if(ppi_network_size!=nrow(ppi_network)){
+    if(verbose) print(paste(nrow(ppi_network),'out of',ppi_network_size,'network edges selected.', sep=' '))
+  }
+  if(!directed_network){
+    if(verbose) print('Undirect network. Converting to direct network...')
+    ppi_network_rev <- ppi_network[,c(2:1)]
+    colnames(ppi_network_rev) <- colnames(ppi_network)[1:2]
+    ppi_network <- rbind(ppi_network[,1:2],ppi_network_rev)
+  }
+  disease_genes_size <- length(disease_genes)
+  disease_genes <- intersect(disease_genes,ppi_network[,2])
+  if(length(disease_genes)==0) stop('No disease-associated ID match with ppi_network and tissue_expr_data!')
+  else if( disease_genes_size!=length(disease_genes)){
+    if(verbose) print(paste(length(disease_genes),'disease-associated IDs are reachable from the network.',sep=' '))
+  }
+  if(!(db %in% c('kegg','BP','MF','CC'))) stop('Unused value for argument db')
+  idx <- order(tissue_scores$avg_tissue_score,decreasing=T)
+  tissue_scores <- tissue_scores[idx,]
+  g <- igraph::graph_from_edgelist(as.matrix(ppi_network[,1:2]), directed=T)
+  tissue_expr_data <- scales::rescale(tissue_expr_data,c(1,.Machine$double.eps))
+  sign_tiss <- colnames(tissue_scores)[-ncol(tissue_scores)]
+  sh.path <- lapply(sign_tiss,function(i){
+    igraph::E(g)$weight <- tissue_expr_data[ppi_network[,1],i]
+    lapply(top_targets,function(x)
+      igraph::shortest_paths(g, from=x, to=disease_genes, mode =  "out", weights = NULL,output='epath')$epath)
+  })
+  names(sh.path) <- sign_tiss
+  for(i in names(sh.path)) names(sh.path[[i]]) <- top_targets
+  all_target_path <-lapply(sh.path,function(x)lapply(x,function(y)do.call(c,y)))
+  all_tissue_path <- lapply(all_target_path,function(x)do.call(c,x))
+  ids <- lapply(all_tissue_path,igraph::as_ids)
+  shiny::shinyApp(
+    ui = fluidPage(
+      shiny::fluidRow(
+        shiny::column(
+          width = 2,
+          shiny::checkboxGroupInput("tissue","Select tissue/s",sign_tiss,selected = sign_tiss[1])
+        ),
+        shiny::column(
+          width = 12,
+          visNetwork::visNetworkOutput("network")
+        )
+      ),
+      shiny::fluidRow(
+        shiny::column(
+          width = 12,
+          shiny::tableOutput("table")
+        )
+      )
+    ),
+    server = function(input, output) {
+      output$network <- visNetwork::renderVisNetwork({
+        shiny::validate(need(input$tissue!='','Please select one or more tissues'))
+        if(length(input$tissue)>1){
+          edge <- strsplit(Reduce(intersect,ids[input$tissue]),split='|',fixed=T)
+        }
+        else if (length(input$tissue) ==1){
+          edge <- strsplit(ids[[input$tissue]],split='|',fixed=T)
+        }
+        edge <- as.data.frame(do.call(rbind,edge))
+        edge <- edge[!duplicated(edge),]
+        colnames(edge) <- c('from','to')
+        edge$width <- scales::rescale(rowMeans(1-tissue_expr_data[edge$from,input$tissue,drop=F]),c(1,5))
+        nb <- unique(unlist(edge[,1:2]))
+        node <- data.frame(id=nb,label=nb,stringsAsFactors = F)
+        node$value <- rowMeans(tissue_scores[nb,input$tissue,drop=F])
+        gp <- rep('bridge gene',nrow(node))
+        gp[node$label%in%top_targets] <- 'target gene'
+        gp[node$label%in%disease_genes] <- 'disease gene'
+        node$group <- gp
+        node$shape <- c("circle","star","diamond")[as.numeric(as.factor(gp))]
+        visNetwork::visNetwork(node, edge, height = "1500px", width = "500%") %>%
+          visNetwork::visGroups(groupname = "target gene", color = list(background = "skyblue", border = "deepskyblue")) %>%
+          visNetwork::visGroups(groupname = "disease gene", color = list(background = "lightcoral", border = "red")) %>%
+          visNetwork::visGroups(groupname = "bridge gene", shape="circle") %>%
+          visNetwork::visLegend(addNodes=list(
+            list(label = "disease gene", shape = "star",
+                 color = list(background = "lightcoral", border = "red")),
+            list(label = "target gene", shape = "diamond",
+                 color = list(background = "skyblue", border = "deepskyblue")),
+            list(label = "bridge gene", shape = "circle")), useGroups = FALSE,width=0.1) %>%
+          visNetwork::visLayout(hierarchical = TRUE) %>%  # visLayout(randomSeed = 123), visIgraphLayout(layout = "layout_with_sugiyama")
+          visNetwork::visEvents(select = "function(nodes) {
+                    Shiny.onInputChange('current_node_id', nodes.nodes);
+                    ;}")
+      })
+      need = NULL
+      output$table <- shiny::renderTable({
+        shiny::validate(need(input$tissue!='',NULL),
+                 need(input$current_node_id != '' & input$current_node_id %in% top_targets,'Please select a target gene'))
+        current_target_path <- sapply(all_target_path[input$tissue],function(x) x[input$current_node_id])
+        current_target_path <- Reduce(igraph::intersection,current_target_path)
+        target_interactors <- unique(c(igraph::ends(g,current_target_path)))
+        if(db=='kegg') res <- clusterProfiler::enrichKEGG(target_interactors,organism = 'hsa')@result
+        else res <- clusterProfiler::enrichGO(target_interactors, 'org.Hs.eg.db', ont = db)@result
+        res <- res[res$p.adjust<0.05,]
+        if (nrow(res) > 25) res <- res[1:25,]
+        res
+      })
+    }
+  )
+}
+

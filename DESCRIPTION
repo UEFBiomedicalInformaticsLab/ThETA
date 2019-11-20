@@ -1,6 +1,5 @@
 Package: ThETA
-Title: Transcriptome-based efficacy estimates of
-        drug-target(gene)-disease associations.
+Title: Transcriptome-based efficacy estimates of target(gene)-disease associations
 Version: 0.0.0.9000
 Authors@R: 
     c(person(given = "Mario",
@@ -21,9 +20,9 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.0.0
-Suggests: knitr, rmarkdown, MIGSA, ReactomePA, clusterProfiler, enrichplot, ggplot2, visNetwork, dplyr, ggpubr, kableExtra, grex, CePa, httr, jsonlite, ggpubr
+Suggests: knitr, rmarkdown, ggpubr 
 VignetteBuilder: knitr
-Imports: Rdpack, RCurl, SPARQL, XML, dnet, mltools, snow, doParallel, reshape
+Imports: Rdpack, RCurl, SPARQL, XML, dnet, mltools, snow, doParallel, reshape, MIGSA, ReactomePA, clusterProfiler, enrichplot, ggplot2, jsonlite, visNetwork, dplyr, kableExtra, grex, CePa, httr, AnnotationDbi, data.table, foreach, igraph, reshape2, shiny, scales, org.Hs.eg.db
 RdMacros: Rdpack
 NeedsCompilation: no
 Packaged: 2019-11-18 08:45:57 UTC; vittfo

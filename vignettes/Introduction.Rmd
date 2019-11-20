@@ -1,6 +1,6 @@
 ---
 title: "Introduction to ThETA"
-author: "Mario Failli & Vittorio Fortino"
+author: "Mario Failli, Jussi Pananen and Vittorio Fortino"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -95,7 +95,7 @@ library(dplyr)
 
 First, we upload the ThETA package and the 5 .rda files:
 
-```{r, load_theta, cache.lazy = TRUE, echo = TRUE}
+```{r, load_theta, cache.lazy = TRUE, echo = TRUE, message = FALSE}
 library(ThETA)
 data(gtexv7_zscore)
 data(ppi_strdb_700)
@@ -121,7 +121,7 @@ T2DM_rel_tissue_scores = disease_tissue_zscores$z[which(rownames(disease_tissue_
 3. A tissue-specific efficacy (TSE) score is then estimated for all genes that are expressed in the tissues that are relevant for T2D. It should be noted that the following script is computer-intensive. Indeed, we specified only two genes in input. However, it is highly recommended to use the whole set of T2D-relevant genes.  
 
 ```{r, t2d_sco, cache.lazy = TRUE, echo = TRUE, results = 'hide'}
-T2DM_Tscores <- tissue.specific.scores(T2DM_genes$entrez, 
+T2DM_Tscores <- tissue.specific.scores(T2DM_genes$entrez[1:2], 
                                         ppi_network = ppi_strdb_700, 
                                         directed_network = FALSE, 
                                         tissue_expr_data = gtexv7_zscore,
@@ -132,7 +132,7 @@ T2DM_Tscores <- tissue.specific.scores(T2DM_genes$entrez,
 
 The output is a *data.frame* object containing the TSE score for all genes-tissue pairs.
 
-```{r, cache = TRUE, echo = FALSE }
+```{r, cache = TRUE, echo = FALSE, message = FALSE}
 knitr::kable(T2DM_Tscores[1:5,]) %>%
   kableExtra::kable_styling(bootstrap_options = "striped", full_width = F) 
 ```
@@ -228,7 +228,8 @@ modulation_scores <- modulation_scores[modulation_scores$disease.id != '' &
 
 Finally, for each gene-disease pair, only the perturbation giving the maximum score are selected (see Failli et al. 2019).
 
-```{r, max_pert, cache.lazy = TRUE, echo = TRUE}
+```{r, max_pert, cache.lazy = TRUE, echo = TRUE, message = FALSE}
+library(data.table)
 modul_score <- data.table::as.data.table(modulation_scores)
 modul_score <- as.data.frame(modul_score[, .SD[which.max(modscore)], 
                                            by=list(disease.id, target.entrez)])
@@ -342,7 +343,7 @@ knitr:::kable(head(tab_score)) %>%
 
 A shiny-based application was built for the visualization of  tissue-specific gene networks highlighting connections between disease-genes and drug(gene)-targets. 
 
-```{r, cache.lazy = TRUE, }
+```{r, cache.lazy = TRUE, eval = FALSE}
 library(shiny)
 library(visNetwork)
 library(org.Hs.eg.db)
@@ -351,7 +352,7 @@ visualize.graph(tissue_scores = T2DM_Tscores,
                  disease_genes =T2DM_genes$entrez[1:5],
                  ppi_network = ppi_strdb_700, 
                  tissue_expr_data = gtexv7_zscore,
-                 top_target = rownames(T2DM_top50)[1:5], 
+                 top_targets = rownames(T2DM_top50)[1:5], 
                  db='BP')
 ```           
 
@@ -391,6 +392,7 @@ figure
 ```
 
 ```{r, novelty_plot, fig.width=6, fig.height=2, cache.lazy = TRUE, echo = TRUE, warning = FALSE, message = FALSE}
+library(org.Hs.eg.db)
 T2D_pmd_plot_top = novelty.plots(rownames(T2DM_allsc)[c(1:5)], orgdb = org.Hs.eg.db, font_size = 14, pubmed = c(2010,2018))
 T2D_pmd_plot_top
 ```

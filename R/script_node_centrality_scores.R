@@ -67,6 +67,7 @@ Borda <- function(input){
 #'in the form of Z-scores. Columns are tissues and rows are genes; colnames and rownames must be provided.
 #'@param agg_function integer value between 1 and 4. Provides control over Borda aggregation functions.
 #'1 for \code{mean}, 2 for \code{median}, 3 for \code{geo.mean} and 4 for \code{l2norm}. Defaults to 4.
+#'@param directed_network boolean value indicating the use of a direct network. Defaults to FALSE.
 #'@param parallel an integer indicating how many cores will be registered for parallel computation.
 #'If NULL, the function will not use parallel computation.
 #'@param verbose logical to indicate whether the messages will be displayed or not in the screen.

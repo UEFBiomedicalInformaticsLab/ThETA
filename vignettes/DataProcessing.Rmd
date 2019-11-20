@@ -1,6 +1,6 @@
 ---
 title: "Pre-processing needed to compile the available .rda files"
-author: "Mario Failli & Vittorio Fortino"
+author: "Mario Failli, Jussi Pananen and Vittorio Fortino"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -51,7 +51,7 @@ knitr::opts_chunk$set(
 
 ## Estimating disease relevant genes and tissues before compiling the tissue-specific efficacy scores
 
-```{r, load_theta, cache.lazy = TRUE, echo = TRUE}
+```{r, load_theta, cache.lazy = TRUE, echo = TRUE, eval = FALSE}
 library(ThETA)
 data(gtexv7_zscore)
 data(ppi_strdb_700)
@@ -62,7 +62,7 @@ data(centrality_score)
 
 The following code shows how to retrieve disease-associated genes with a specific confident score (see www.disgenet.org/help for more details) and how to compile z-scores for disease-tissue pairs.
 
-```{r, load_spa, cache.lazy = TRUE, echo = TRUE, message = FALSE}
+```{r, load_spa, cache.lazy = TRUE, echo = TRUE, message = FALSE, eval = FALSE}
 if("AnnotationDbi" %in% rownames(installed.packages()) == FALSE) {
   if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
@@ -77,7 +77,7 @@ library(AnnotationDbi)
 
 First, the MeshID corresponding to T2DM are retrieved.
 
-```{r, ret_mesh, cache.lazy = TRUE, echo = TRUE}
+```{r, ret_mesh, cache.lazy = TRUE, echo = TRUE, eval = FALSE}
 T2DM_mesh <- AnnotationDbi::select(MeSH.db,keys = 'Diabetes Mellitus, Type 2', 
                                     columns = c("MESHID","MESHTERM"),
                                     keytype = "MESHTERM")
@@ -85,7 +85,7 @@ T2DM_mesh <- AnnotationDbi::select(MeSH.db,keys = 'Diabetes Mellitus, Type 2',
 
 Then, variant genes associated to T2DM are collected from DisGeNET.
 
-```{r, ret_genes, cache.lazy = TRUE, echo = TRUE}
+```{r, ret_genes, cache.lazy = TRUE, echo = TRUE, eval = FALSE}
 library(RCurl)
 library(XML)
 T2DM_genes <- disease.vrnts(T2DM_mesh$MESHID, id_type = 'mesh', min_score = 0.6, curated = T)
@@ -94,7 +94,7 @@ T2DM_genes <- disease.vrnts(T2DM_mesh$MESHID, id_type = 'mesh', min_score = 0.6,
 Once the set of disease-relevant genes is downloaded, then the corresponding set of disease-relevant tissues can be determined (Failli et al. 2019). 
 The parameter *top* can be used to extend the initial set of disease-relevant genes. It indicates how many genes closely related to the disease-genes must be added. 
 
-```{r, est_drt, cache.lazy = TRUE, echo = TRUE, results = 'hide'}
+```{r, est_drt, cache.lazy = TRUE, echo = TRUE, results = 'hide', eval = FALSE}
 T2DM_tiss_zscore <- dis.rel.tissues(disease_genes = T2DM_genes$entrez, 
                                       ppi_network = ppi_strdb_700, weighted = TRUE,
                                       tissue_expr_data = gtexv7_zscore, 
@@ -103,7 +103,7 @@ T2DM_tiss_zscore <- dis.rel.tissues(disease_genes = T2DM_genes$entrez,
 
 The previous code generates the following table of z-scores, indicating significant associations between disease and tissues in GTEx. 
 
-```{r, tab_t2d_all, cache = TRUE, echo = FALSE}
+```{r, tab_t2d_all, cache = TRUE, echo = FALSE, eval = FALSE}
 library(kableExtra)
 knitr::kable(T2DM_tiss_zscore[1:5,]) %>%
   kable_styling(bootstrap_options = "striped", full_width = F) 
@@ -254,7 +254,7 @@ tissue_score <- list.tissue.specific.scores(disease_gene_list = sapply(dis_vrnts
                                             tissue_expr_data = gtexv7_zscore,  
                                             dis_relevant_tissues = disease_tissue_zscores$z[idx,], 
                                             W = centrality_score$borda.disc, cutoff = 1.6,
-                                            verbose = FALSE, parallel = 30)
+                                            verbose = FALSE, parallel = 10)
 ```
 
 ```{r, cache = TRUE, echo = FALSE, eval = FALSE}

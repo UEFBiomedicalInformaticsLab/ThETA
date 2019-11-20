@@ -103,8 +103,8 @@ weighted.shortest.path <- function(disease_genes, ppi_network, directed_network 
 #'@param tissue_expr_data a numeric matrix or data frame indicating expression significances
 #'in the form of Z-scores. Columns are tissues and rows are genes; colnames and rownames must be provided.
 #'Gene IDs are expected to match with those provided in \code{ppi_network}.
-#'@param dis_relevant_tissues a named numeric vector in case of \code{get.tissue.specific.scores} or a
-#'numeric matrix in case of \code{get.list.tissue.specific.scores} indicating the significances of
+#'@param dis_relevant_tissues a named numeric vector in case of \code{tissue.specific.scores} or a
+#'numeric matrix in case of \code{list.tissue.specific.scores} indicating the significances of
 #'disease-tissue associations in the form of Z-scores. Vector names correspond to tissue; matrix colnames and
 #'rownames correspond to tissues and diseases, respectively. Names must be provided.
 #'@param W a list of discretized Borda-aggregated rankings for each tissue as the one compiled by \code{get_node_centrality}.
@@ -115,6 +115,7 @@ weighted.shortest.path <- function(disease_genes, ppi_network, directed_network 
 #'@export
 #'@importFrom Rdpack reprompt
 #'@importFrom scales rescale
+#'@importFrom stats quantile
 tissue.specific.scores <- function(disease_genes, ppi_network, directed_network = F,
                                    tissue_expr_data,  dis_relevant_tissues, W, cutoff = 1.6,
                                    verbose = FALSE) {
@@ -125,7 +126,7 @@ tissue.specific.scores <- function(disease_genes, ppi_network, directed_network 
                                     directed_network,tissue_expr_data,
                                     dis_relevant_tissues,W, cutoff, verbose)
   tissue_scores <- apply(wsp_list$shortest_paths, 2, function(x) {
-    q <- quantile(x)
+    q <- stats::quantile(x)
     outliers <- q[4]+(1.5*(q[4]-q[2]))
     ts <- scales::rescale(x, from=c(min(x), outliers), to=c(1,0))
     ts[ts< 0] <- 0
@@ -136,6 +137,7 @@ tissue.specific.scores <- function(disease_genes, ppi_network, directed_network 
 }
 #'@rdname tissue.specific.scores
 #'@export
+#'@importFrom stats setNames
 #'@importFrom scales rescale
 #'@importFrom snow makeCluster stopCluster
 #'@importFrom doParallel registerDoParallel
@@ -143,8 +145,6 @@ tissue.specific.scores <- function(disease_genes, ppi_network, directed_network 
 list.tissue.specific.scores <- function(disease_gene_list, ppi_network, directed_network = F,
                                         tissue_expr_data,  dis_relevant_tissues, W, cutoff = 1.6,
                                         verbose = FALSE, parallel = NULL) {
-  require(foreach)
-  require(doParallel)
   if(is.list(disease_gene_list) == FALSE) stop('Argument disease_gene_list is not a list!')
   if(is.null(names(disease_gene_list))) stop('Names for disease_gene_list must be provided!')
   if(is.matrix(dis_relevant_tissues) == FALSE) stop('Argument dis_relevant_tissues is not a matrix!')
@@ -158,16 +158,19 @@ list.tissue.specific.scores <- function(disease_gene_list, ppi_network, directed
   }
   tissue_scores <- NULL
   if(!is.null(parallel)) {
+    dis = NULL
     cl <- snow::makeCluster(parallel)
     doParallel::registerDoParallel(cl)
     `%dopar%` <- foreach::`%dopar%`
-    wsp <- foreach::foreach(i=common_diseases,.export = 'weighted.shortest.path',.final = function(i) setNames(i, common_diseases)) %dopar%
-      weighted.shortest.path(disease_gene_list[[i]], ppi_network, directed_network, tissue_expr_data, dis_relevant_tissues[i,], W, cutoff = 1.6)
+    wsp <- foreach::foreach(dis=common_diseases,
+                            .export = 'weighted.shortest.path',
+                            .final = function(i) stats::setNames(dis, common_diseases)) %dopar%
+      weighted.shortest.path(disease_gene_list[[dis]], ppi_network, directed_network, tissue_expr_data, dis_relevant_tissues[dis,], W, cutoff = 1.6)
     snow::stopCluster(cl)
   }
   else {
     warning("A parallel computation is highly recommended",immediate. = T)
-    wsp <- sapply(common_diseases,function(i) weighted.shortest.path(disease_gene_list[[i]], ppi_network, directed_network, tissue_expr_data, dis_relevant_tissues[i,], W, cutoff = 1.6),simplify=F)
+    wsp <- sapply(common_diseases, function(i) weighted.shortest.path(disease_gene_list[[i]], ppi_network, directed_network, tissue_expr_data, dis_relevant_tissues[i,], W, cutoff = 1.6),simplify=F)
   }
   wsp <- do.call(function(...)mapply(list,...,SIMPLIFY = F),wsp)
   tissue_scores <- lapply(wsp$shortest_paths, function(x) apply(x, 2, function(y) {
@@ -201,9 +204,10 @@ list.tissue.specific.scores <- function(disease_gene_list, ppi_network, directed
 #'@param tissue_expr_data a numeric matrix or data frame indicating expression significances
 #'in the form of Z-scores. Columns are tissues and rows are genes; colnames and rownames must be provided.
 #'Gene IDs are expected to match with those provided in \code{ppi_network}.
-#'@param top_target character vector indicating a list of ENTREZ id to be used for the slection of the shortest paths.
-#'@param db character indicating the database to consider for enrichment analysis.
-#'Possible values are: \code{kegg}, \code{BP}, \code{MF} and \code{CC}. Defaults to \code{kegg}.
+#'@param top_targets character vector indicating a list of ENTREZ id to be used for the slection of the shortest paths.
+#'@param rwr_restart the restart probability used for RWR. See \code{dnet::dRWR} for more details.
+#'@param rwr_norm the way to normalise the adjacency matrix of the input graph. See \code{dnet::dRWR} for more details.
+#'@param rwr_cutoff the cuoff value to select the most visited genes. 
 #'@param verbose logical indicating whether the messages will be displayed or not in the screen.
 #'@return a list of four objects: \cr
 #'        - \strong{tsn}: a list of tissue-specific networks;\cr
@@ -375,7 +379,6 @@ generate.ora.plots <- function(ora_data, set_plots = c("dotplot", "emapplot", "c
   return(list_plots)
 }
 
-
 #'Generate PubMed Central Trend plots.
 #'
 #'It uses the pmcplot function from R package 'enrichplot' to generate gene-based trend plots.
@@ -396,163 +399,10 @@ novelty.plots <- function(list_genes, gene_id = 'ENTREZID', orgdb = NULL, pubmed
   pmc.genes = as.character(AnnotationDbi::mapIds(orgdb, list_genes, 'SYMBOL', gene_id))
   print(pmc.genes)
   plot <- enrichplot::pmcplot(pmc.genes, pubmed[1]:pubmed[2]) + ggplot2::theme_minimal() +
-                               ggplot2::theme(legend.title=ggplot2::element_text(size=font_size),
-                                              legend.text=element_text(size=font_size),
-                                              axis.text.x = element_text(size=font_size),
-                                              axis.text.y = element_text(size=font_size))
+    ggplot2::theme(legend.title=ggplot2::element_text(size=font_size),
+                   legend.text=element_text(size=font_size),
+                   axis.text.x = element_text(size=font_size),
+                   axis.text.y = element_text(size=font_size))
   return(plot)
 }
-
-#'Interactive visualization of tissue-specific networks.
-#'
-#'It uses visNetwork to build tissue-specific networks on shortest paths connecting disease genes with selected drug targets(genes).
-#'
-#'@param tissue_scores a data.frame as the one compiled by \code{get.tissue.specific.scores}
-#'@param disease_genes character vector containing the IDs of the genes related to a particular disease.
-#'Gene IDs are expected to match with those provided in \code{ppi_network} and \code{tissue_expr_data}.
-#'@param ppi_network a matrix or a data frame with at least two columns
-#'reporting the ppi connections (or edges). Each line corresponds to a direct interaction.
-#'Columns give the gene IDs of the two interacting proteins.
-#'@param directed_network logical indicating whether the PPI is directed.
-#'@param tissue_expr_data a numeric matrix or data frame indicating expression significances
-#'in the form of Z-scores. Columns are tissues and rows are genes; colnames and rownames must be provided.
-#'Gene IDs are expected to match with those provided in \code{ppi_network}.
-#'@param top_target character vector indicating a list of ENTREZ id to be used for the slection of the shortest paths.
-#'@param db character indicating the database to consider for enrichment analysis.
-#'Possible values are: \code{kegg}, \code{BP}, \code{MF} and \code{CC}. Defaults to \code{kegg}.
-#'@param verbose logical indicating whether the messages will be displayed or not in the screen.
-#'@importFrom AnnotationDbi mapIds
-#'@importFrom visNetwork visNetwork
-#'@importFrom visNetwork visIgraphLayout
-#'@importFrom visNetwork visGroups
-#'@importFrom visNetwork visLegend
-#'@importFrom visNetwork visEvents
-visualize.graph <- function(tissue_scores, disease_genes, ppi_network, directed_network = FALSE,
-                            tissue_expr_data, top_target = NULL, db='kegg', verbose = FALSE){
-  if(is.null(top_target)) stop('Please specifiy a set of targets (ENTREZ ids)!')
-  if(is.null(rownames(tissue_expr_data))|is.null(colnames(tissue_expr_data))){
-    stop('Both colnames and rownames for tissue_expr_data must be provided.')
-  }
-  for(i in 1:2) ppi_network[,i] <- as.character(ppi_network[,i])
-  ppi_network <- ppi_network[!duplicated(ppi_network[,1:2]),]
-  ppi_network_size <- nrow(ppi_network)
-  if(directed_network) idx <- ppi_network[,1]%in%rownames(tissue_expr_data)
-  else idx <- ppi_network[,1]%in%rownames(tissue_expr_data) & ppi_network[,2]%in%rownames(tissue_expr_data)
-  ppi_network <- ppi_network[idx,]
-  if(nrow(ppi_network)==0) stop('No corresponding IDs between ppi_network and tissue_expr_data.')
-  else if(ppi_network_size!=nrow(ppi_network)){
-    if(verbose) print(paste(nrow(ppi_network),'out of',ppi_network_size,'network edges selected.', sep=' '))
-  }
-  if(!directed_network){
-    if(verbose) print('Undirect network. Converting to direct network...')
-    ppi_network_rev <- ppi_network[,c(2:1)]
-    colnames(ppi_network_rev) <- colnames(ppi_network)[1:2]
-    ppi_network <- rbind(ppi_network[,1:2],ppi_network_rev)
-  }
-  disease_genes_size <- length(disease_genes)
-  disease_genes <- intersect(disease_genes,ppi_network[,2])
-  if(length(disease_genes)==0) stop('No disease-associated ID match with ppi_network and tissue_expr_data!')
-  else if( disease_genes_size!=length(disease_genes)){
-    if(verbose) print(paste(length(disease_genes),'disease-associated IDs are reachable from the network.',sep=' '))
-  }
-  if(!(db %in% c('kegg','BP','MF','CC'))) stop('Unused value for argument db')
-  idx <- order(tissue_scores$avg_tissue_score,decreasing=T)
-  tissue_scores <- tissue_scores[idx,]
-  g <- igraph::graph_from_edgelist(as.matrix(ppi_network[,1:2]), directed=T)
-  tissue_expr_data <- scales::rescale(tissue_expr_data,c(1,.Machine$double.eps))
-  sign_tiss <- colnames(tissue_scores)[-ncol(tissue_scores)]
-  sh.path <- lapply(sign_tiss,function(i){
-    igraph::E(g)$weight <- tissue_expr_data[ppi_network[,1],i]
-    lapply(top_target,function(x)
-      igraph::shortest_paths(g, from=x, to=disease_genes, mode =  "out", weights = NULL,output='epath')$epath)
-  })
-  names(sh.path) <- sign_tiss
-  for(i in names(sh.path)) names(sh.path[[i]]) <- top_target
-  all_target_path <-lapply(sh.path,function(x)lapply(x,function(y)do.call(c,y)))
-  all_tissue_path <- lapply(all_target_path,function(x)do.call(c,x))
-  ids <- lapply(all_tissue_path,igraph::as_ids)
-  shinyApp(
-    ui = fluidPage(
-      fluidRow(
-        column(
-          width = 2,
-          checkboxGroupInput("tissue","Select tissue/s",sign_tiss,selected = sign_tiss[1])
-        ),
-        column(
-          width = 10,
-          visNetworkOutput("network")
-        )
-      ),
-      fluidRow(
-        column(
-          width = 12,
-          tableOutput("table")
-        )
-      ),
-      textOutput("text")
-    ),
-    server = function(input, output,session) {
-      last_id <- NULL
-      output$network <- renderVisNetwork({
-        validate(need(input$tissue!='','Please select one or more tissues'))
-        if(length(input$tissue)>1){
-          edge <- strsplit(Reduce(intersect,ids[input$tissue]),split='|',fixed=T)
-        }
-        else if (length(input$tissue) ==1){
-          edge <- strsplit(ids[[input$tissue]],split='|',fixed=T)
-        }
-        edge <- as.data.frame(do.call(rbind,edge))
-        edge <- edge[!duplicated(edge),]
-        colnames(edge) <- c('from','to')
-        edge$width <- scales::rescale(rowMeans(1-tissue_expr_data[edge$from,input$tissue,drop=F]),c(1,5))
-        edge$arrows <- 'to'
-        nb <- unique(unlist(edge[,1:2]))
-        node <- data.frame(id=nb,label=nb,stringsAsFactors = F)
-        node$title <- AnnotationDbi::mapIds(org.Hs.eg.db,as.character(nb),'SYMBOL','ENTREZID', verbose = FALSE)
-        node$size <- rowMeans(tissue_scores[nb,input$tissue,drop=F])*20
-        gp <- rep('bridge gene',nrow(node))
-        gp[node$label%in%top_target] <- 'target gene'
-        gp[node$label%in%disease_genes] <- 'disease gene'
-        node$group <- gp
-        node$shape <- rep('dot',length(gp))
-        node$shape[gp=='target gene'] <- 'triangle'
-        node$shape[gp=='disease gene'] <- 'star'
-        visNetwork::visNetwork(node, edge, height = "1500px", width = "500%") %>%
-          visNetwork::visGroups(groupname = "target gene", color = list(background = "skyblue", border = "deepskyblue")) %>%
-          visNetwork::visGroups(groupname = "disease gene", color = list(background = "lightcoral", border = "red")) %>%
-          visNetwork::visGroups(groupname = "bridge gene", shape="dot") %>%
-          visNetwork::visLegend(addNodes=list(
-            list(label = "disease gene", shape = "star",
-                 color = list(background = "lightcoral", border = "red")),
-            list(label = "target gene", shape = "triangle",
-                 color = list(background = "skyblue", border = "deepskyblue")),
-            list(label = "bridge gene", shape = "dot")),
-            useGroups = FALSE,width=0.1) %>%
-          visNetwork::visIgraphLayout(layout = "layout_with_sugiyama") %>%
-          visNetwork::visEvents(select = "function(nodes) {
-                    Shiny.onInputChange('current_node_id', nodes.nodes);
-                    ;}")
-    })
-      output$table <- renderTable({
-        res = NULL
-        if (is.null(last_id) |
-            !identical(last_id,input$current_node_id) ) {
-          validate(need(input$current_node_id%in%top_target,'Please select a target gene'))
-          last_id <<- input$current_node_id
-          current_target_path <- sapply(all_target_path[input$tissue],function(x) x[input$current_node_id])
-          current_target_path <- Reduce(igraph::intersection,current_target_path)
-          target_interactors <- unique(c(igraph::ends(g,current_target_path)))
-          if(db=='kegg') res <- clusterProfiler::enrichKEGG(target_interactors,organism = 'hsa')@result
-          else res <- clusterProfiler::enrichGO(target_interactors, 'org.Hs.eg.db', ont = db)@result
-          res <- res[res$p.adjust<0.05,]
-          if (nrow(res) > 25) res <- res[1:25,]
-          res
-        }
-        else{
-          validate(need(!is.null(res),'Please select a target gene'))
-        }
-      })
-    }
-  )
-  }
 

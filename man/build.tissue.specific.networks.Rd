@@ -33,12 +33,15 @@ Columns give the gene IDs of the two interacting proteins.}
 in the form of Z-scores. Columns are tissues and rows are genes; colnames and rownames must be provided.
 Gene IDs are expected to match with those provided in \code{ppi_network}.}
 
+\item{top_targets}{character vector indicating a list of ENTREZ id to be used for the slection of the shortest paths.}
+
+\item{rwr_restart}{the restart probability used for RWR. See \code{dnet::dRWR} for more details.}
+
+\item{rwr_norm}{the way to normalise the adjacency matrix of the input graph. See \code{dnet::dRWR} for more details.}
+
+\item{rwr_cutoff}{the cuoff value to select the most visited genes.}
+
 \item{verbose}{logical indicating whether the messages will be displayed or not in the screen.}
-
-\item{top_target}{character vector indicating a list of ENTREZ id to be used for the slection of the shortest paths.}
-
-\item{db}{character indicating the database to consider for enrichment analysis.
-Possible values are: \code{kegg}, \code{BP}, \code{MF} and \code{CC}. Defaults to \code{kegg}.}
 }
 \value{
 a list of four objects: \cr

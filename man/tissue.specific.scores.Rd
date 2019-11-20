@@ -42,8 +42,8 @@ Columns give the gene IDs of the two interacting proteins.}
 in the form of Z-scores. Columns are tissues and rows are genes; colnames and rownames must be provided.
 Gene IDs are expected to match with those provided in \code{ppi_network}.}
 
-\item{dis_relevant_tissues}{a named numeric vector in case of \code{get.tissue.specific.scores} or a
-numeric matrix in case of \code{get.list.tissue.specific.scores} indicating the significances of
+\item{dis_relevant_tissues}{a named numeric vector in case of \code{tissue.specific.scores} or a
+numeric matrix in case of \code{list.tissue.specific.scores} indicating the significances of
 disease-tissue associations in the form of Z-scores. Vector names correspond to tissue; matrix colnames and
 rownames correspond to tissues and diseases, respectively. Names must be provided.}
 

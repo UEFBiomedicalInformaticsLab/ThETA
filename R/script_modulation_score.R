@@ -15,11 +15,14 @@
 #'@return a data frame with target-disease associations and related modulation scores. The gene modulation type and
 #'the disease name are also reported.
 #'@export
+#'@importFrom stats sd
+#'@importFrom stats quantile
 #'@importFrom Rdpack reprompt
 #'@importFrom MIGSA downloadEnrichrGeneSets
 #'@importFrom reshape2 melt
-#'@importFrom data.table as.data.table
 #'@importFrom scales rescale
+#'@importFrom data.table as.data.table
+#'@importFrom data.table .SD
 modulation.score <- function(geneSets = NULL){
   if(is.null(geneSets)){
     diff_exp_gene_sets <- MIGSA::downloadEnrichrGeneSets(c('Disease_Perturbations_from_GEO_up',
@@ -59,17 +62,21 @@ modulation.score <- function(geneSets = NULL){
                prtrb_specular[[1]], prtrb_specular[[2]],SIMPLIFY=F)
   names(occ.)<-c('up-down','down-up')
   ### Calculating the composite z-scores for each disease-gene perturbation interaction
-  z1 <-lapply(occ.,function(x)t(apply(x,1,function(y)(y-mean(y))/sd(y))))
-  z2 <-lapply(occ.,function(x)apply(x,2,function(y)(y-mean(y))/sd(y)))
+  z1 <- lapply(occ.,function(x)t(apply(x,1,function(y)(y-mean(y))/stats::sd(y))))
+  z2 <- lapply(occ.,function(x)apply(x,2,function(y)(y-mean(y))/stats::sd(y)))
   Z <- mapply('+',z1,z2,SIMPLIFY = F)
   ### Composite score
   Z[['both']] <- (Z[[1]]+Z[[2]])/2
   ### Removing indexes of perturbations whose gene signatures correspond to few human orthologs
-  len <- lapply(geneSets,function(x)sapply(x,function(y)length(y$geneIds)))
-  out <- sapply(len,function(x){q<-quantile(x);q[2]-1.5*(q[4]-q[2])})
+  len <- lapply(geneSets,function(x) sapply(x,function(y)length(y$geneIds)))
+  out <- sapply(len,function(x){q <- stats::quantile(x);q[2]-1.5*(q[4]-q[2])})
   idx <- mapply(function(x,i)x>i,len,out,SIMPLIFY=F)
   idx <- lapply(seq(1,4,by=2),function(i)do.call('&',idx[c(i,i+1)]))
   mat <- Z$both[idx[[2]],idx[[1]]]
+  ### Init
+  modscore = NULL
+  target.id = NULL
+  disease.id = NULL
   ### Aggregating target-disease pairs by max score
   df <- reshape2::melt(mat, value.name = "modscore")
   colnames(df)[1:2] <- c('target.id','disease.id')
@@ -79,7 +86,7 @@ modulation.score <- function(geneSets = NULL){
   dt <- data.table::as.data.table(df)
   dt <- dt[, .SD[which.max(modscore)], by=list(target.id,disease.id)]
   ### Rescaling scores to [0-1] | Setting outliers above Q3 + 1.5 IQR equal to 1
-  q <- quantile(dt$modscore)
+  q <- stats::quantile(dt$modscore)
   outliers <- q[4]+(1.5*(q[4]-q[2]))
   dt$modscore <- scales::rescale(dt$modscore,from=c(min(dt$modscore),outliers),to=c(0,1))
   dt$modscore[dt$modscore>1] <- 1

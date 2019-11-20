@@ -26,6 +26,8 @@ in the form of Z-scores. Columns are tissues and rows are genes; colnames and ro
 \item{agg_function}{integer value between 1 and 4. Provides control over Borda aggregation functions.
 1 for \code{mean}, 2 for \code{median}, 3 for \code{geo.mean} and 4 for \code{l2norm}. Defaults to 4.}
 
+\item{directed_network}{boolean value indicating the use of a direct network. Defaults to FALSE.}
+
 \item{parallel}{an integer indicating how many cores will be registered for parallel computation.
 If NULL, the function will not use parallel computation.}
 
