@@ -4,20 +4,10 @@
 \alias{novelty.plots}
 \title{Generate PubMed Central Trend plots.}
 \usage{
-novelty.plots(
-  list_genes,
-  gene_id = "ENTREZID",
-  orgdb = NULL,
-  pubmed = c(2010, 2019),
-  font_size = 8
-)
+novelty.plots(list_genes, pubmed = c(2010, 2019), font_size = 8)
 }
 \arguments{
-\item{list_genes}{a list of gene names.}
-
-\item{gene_id}{type of gene-ID.}
-
-\item{orgdb}{a character specifying the organism for the mapping between gene identifiers.}
+\item{list_genes}{a list of gene names (SYMBOLS).}
 
 \item{pubmed}{period of query in the unit of year.}
 

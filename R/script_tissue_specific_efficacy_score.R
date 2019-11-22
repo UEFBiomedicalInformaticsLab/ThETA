@@ -124,7 +124,7 @@ tissue.specific.scores <- function(disease_genes, ppi_network, directed_network 
   # compile the wsp
   wsp_list = weighted.shortest.path(disease_genes,ppi_network,
                                     directed_network,tissue_expr_data,
-                                    dis_relevant_tissues,W, cutoff, verbose)
+                                    dis_relevant_tissues, W, cutoff, verbose)
   tissue_scores <- apply(wsp_list$shortest_paths, 2, function(x) {
     q <- stats::quantile(x)
     outliers <- q[4]+(1.5*(q[4]-q[2]))
@@ -165,12 +165,12 @@ list.tissue.specific.scores <- function(disease_gene_list, ppi_network, directed
     wsp <- foreach::foreach(dis=common_diseases,
                             .export = 'weighted.shortest.path',
                             .final = function(i) stats::setNames(dis, common_diseases)) %dopar%
-      weighted.shortest.path(disease_gene_list[[dis]], ppi_network, directed_network, tissue_expr_data, dis_relevant_tissues[dis,], W, cutoff = 1.6)
+      weighted.shortest.path(disease_gene_list[[dis]], ppi_network, directed_network, tissue_expr_data, dis_relevant_tissues[dis,], W, cutoff = cutoff)
     snow::stopCluster(cl)
   }
   else {
     warning("A parallel computation is highly recommended",immediate. = T)
-    wsp <- sapply(common_diseases, function(i) weighted.shortest.path(disease_gene_list[[i]], ppi_network, directed_network, tissue_expr_data, dis_relevant_tissues[i,], W, cutoff = 1.6),simplify=F)
+    wsp <- sapply(common_diseases, function(i) weighted.shortest.path(disease_gene_list[[i]], ppi_network, directed_network, tissue_expr_data, dis_relevant_tissues[i,], W, cutoff = cutoff),simplify=F)
   }
   wsp <- do.call(function(...)mapply(list,...,SIMPLIFY = F),wsp)
   tissue_scores <- lapply(wsp$shortest_paths, function(x) apply(x, 2, function(y) {
@@ -383,22 +383,17 @@ generate.ora.plots <- function(ora_data, set_plots = c("dotplot", "emapplot", "c
 #'
 #'It uses the pmcplot function from R package 'enrichplot' to generate gene-based trend plots.
 #'
-#'@param list_genes a list of gene names.
-#'@param gene_id type of gene-ID.
-#'@param orgdb a character specifying the organism for the mapping between gene identifiers.
+#'@param list_genes a list of gene names (SYMBOLS).
 #'@param pubmed period of query in the unit of year.
 #'@param font_size text size in pts.
 #'@return a PubMed-trend plot.
 #'@export
 #'@importFrom enrichplot pmcplot
-#'@importFrom AnnotationDbi mapIds
 #'@importFrom ggplot2 theme
 #'@importFrom ggplot2 theme_minimal
 #'@importFrom ggplot2 element_text
-novelty.plots <- function(list_genes, gene_id = 'ENTREZID', orgdb = NULL, pubmed = c(2010,2019), font_size = 8){
-  pmc.genes = as.character(AnnotationDbi::mapIds(orgdb, list_genes, 'SYMBOL', gene_id))
-  print(pmc.genes)
-  plot <- enrichplot::pmcplot(pmc.genes, pubmed[1]:pubmed[2]) + ggplot2::theme_minimal() +
+novelty.plots <- function(list_genes, pubmed = c(2010,2019), font_size = 8){
+  plot <- enrichplot::pmcplot(list_genes, pubmed[1]:pubmed[2]) + ggplot2::theme_minimal() +
     ggplot2::theme(legend.title=ggplot2::element_text(size=font_size),
                    legend.text=element_text(size=font_size),
                    axis.text.x = element_text(size=font_size),

@@ -257,6 +257,7 @@ list.dis.rel.tissues <- function(disease_gene_list, ppi_network, weighted = FALS
 #'in the form of Z-scores. Columns are tissues and rows are genes; colnames and rownames must be provided.
 #'Gene IDs are expected to match with those provided in \code{ppi_network}.
 #'@param top_targets character vector indicating a list of ENTREZ id to be used for the slection of the shortest paths.
+#'@param orgdb_go a character specifying the organism for GO. Deafault value is \code{org.Hs.eg.db}.
 #'@param db character indicating the database to consider for enrichment analysis.
 #'Possible values are: \code{kegg}, \code{BP}, \code{MF} and \code{CC}. Defaults to \code{kegg}.
 #'@param verbose logical indicating whether the messages will be displayed or not in the screen.
@@ -273,7 +274,8 @@ list.dis.rel.tissues <- function(disease_gene_list, ppi_network, weighted = FALS
 #'@importFrom clusterProfiler enrichGO
 #'@importFrom scales rescale
 visualize.graph <- function(tissue_scores, disease_genes, ppi_network, directed_network = FALSE,
-                            tissue_expr_data, top_targets = NULL, db='kegg',verbose = FALSE){
+                            tissue_expr_data, top_targets = NULL, orgdb_go = 'org.Hs.eg.db', 
+                            db='kegg',verbose = FALSE){
   
   if(is.null(top_targets)) stop('Please specifiy a set of targets (ENTREZ ids)!')
   if(is.null(rownames(tissue_expr_data))|is.null(colnames(tissue_expr_data))){
@@ -379,7 +381,7 @@ visualize.graph <- function(tissue_scores, disease_genes, ppi_network, directed_
         current_target_path <- Reduce(igraph::intersection,current_target_path)
         target_interactors <- unique(c(igraph::ends(g,current_target_path)))
         if(db=='kegg') res <- clusterProfiler::enrichKEGG(target_interactors,organism = 'hsa')@result
-        else res <- clusterProfiler::enrichGO(target_interactors, 'org.Hs.eg.db', ont = db)@result
+        else res <- clusterProfiler::enrichGO(target_interactors, orgdb_go, ont = db)@result
         res <- res[res$p.adjust<0.05,]
         if (nrow(res) > 25) res <- res[1:25,]
         res

@@ -376,6 +376,7 @@ Then, ThETA provides functions to compile
 * pubmed trend plots based on a set of gene targets.
 
 ```{r, ora_dat, cache.lazy = TRUE, echo = TRUE, message = FALSE, warning = FALSE}
+library(org.Hs.eg.db)
 T2D_ora_data_shp = generate.ora.data(tsrwr$shp[[1]], databases = "KEGG")
 T2D_ora_data_rwr = generate.ora.data(tsrwr$rwr, databases = "KEGG")
 ```
@@ -393,6 +394,8 @@ figure
 
 ```{r, novelty_plot, fig.width=6, fig.height=2, cache.lazy = TRUE, echo = TRUE, warning = FALSE, message = FALSE}
 library(org.Hs.eg.db)
-T2D_pmd_plot_top = novelty.plots(rownames(T2DM_allsc)[c(1:5)], orgdb = org.Hs.eg.db, font_size = 14, pubmed = c(2010,2018))
+pmc_genes = as.character(AnnotationDbi::mapIds(org.Hs.eg.db, rownames(T2DM_allsc)[c(1:5)], 'SYMBOL', 'ENTREZID'))
+print(pmc_genes)
+T2D_pmd_plot_top = novelty.plots(pmc_genes, font_size = 14, pubmed = c(2010,2018))
 T2D_pmd_plot_top
 ```

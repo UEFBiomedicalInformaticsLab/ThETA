@@ -11,6 +11,7 @@ visualize.graph(
   directed_network = FALSE,
   tissue_expr_data,
   top_targets = NULL,
+  orgdb_go = "org.Hs.eg.db",
   db = "kegg",
   verbose = FALSE
 )
@@ -32,6 +33,8 @@ in the form of Z-scores. Columns are tissues and rows are genes; colnames and ro
 Gene IDs are expected to match with those provided in \code{ppi_network}.}
 
 \item{top_targets}{character vector indicating a list of ENTREZ id to be used for the slection of the shortest paths.}
+
+\item{orgdb_go}{a character specifying the organism for GO. Deafault value is \code{org.Hs.eg.db}.}
 
 \item{db}{character indicating the database to consider for enrichment analysis.
 Possible values are: \code{kegg}, \code{BP}, \code{MF} and \code{CC}. Defaults to \code{kegg}.}
