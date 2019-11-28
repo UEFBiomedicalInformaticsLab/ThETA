@@ -42,7 +42,7 @@ Please, open the available vignette files to learn how to use this R package.
 vignette("Introduction", package = "ThETA")
 vignette("DataProcessing", package = "ThETA")
 ```
-<div class="box2" onclick="Introduction.html'"> About Me</div>
+<div class="box2" onclick="Introduction.html"> Introduction </div>
 
 ### Contact Information
 Mario Failli <m.failli@tigem.it>
