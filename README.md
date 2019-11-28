@@ -42,7 +42,6 @@ Please, open the available vignette files to learn how to use this R package.
 vignette("Introduction", package = "ThETA")
 vignette("DataProcessing", package = "ThETA")
 ```
-<a href="Introduction.html" title="Introduction">Introduction</a>
 
 ### Contact Information
 Mario Failli <m.failli@tigem.it>
