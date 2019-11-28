@@ -96,9 +96,9 @@ The parameter *top* can be used to extend the initial set of disease-relevant ge
 
 ```{r, est_drt, cache.lazy = TRUE, echo = TRUE, results = 'hide', eval = FALSE}
 T2DM_tiss_zscore <- dis.rel.tissues(disease_genes = T2DM_genes$entrez, 
-                                      ppi_network = ppi_strdb_700, weighted = TRUE,
-                                      tissue_expr_data = gtexv7_zscore, 
-                                      thr = 1, top=0, rand = 1000, verbose = T) # rand = 10000 is highly recommended
+                                    ppi_network = ppi_strdb_700, weighted = TRUE,
+                                    tissue_expr_data = gtexv7_zscore, 
+                                    thr = 1, top=0, rand = 1000, verbose = T) # rand = 10000 is highly recommended
 ```
 
 The previous code generates the following table of z-scores, indicating significant associations between disease and tissues in GTEx. 
@@ -248,13 +248,14 @@ centrality_score <- node.centrality(ppi_network = ppi_strdb_700,
   
 ```{r, all_tissue_scores, cache.lazy = TRUE, echo = TRUE, eval= FALSE}
 idx <- apply(disease_tissue_zscores$z,1,function(x) any(x > 1.6))
-
-tissue_score <- list.tissue.specific.scores(disease_gene_list = sapply(dis_vrnts[idx],'[[',1) , 
+disg = sapply(dis_vrnts[idx],'[[',1)   # list of disease-gene sets
+disr = disease_tissue_zscores$z[idx,]  # matrix of disease-relevant tissue scores
+tissue_score <- list.tissue.specific.scores(disease_gene_list = disg, 
                                             ppi_network = ppi_strdb_700, directed_network = F,
                                             tissue_expr_data = gtexv7_zscore,  
-                                            dis_relevant_tissues = disease_tissue_zscores$z[idx,], 
-                                            W = centrality_score$borda.disc, cutoff = 1.6,
-                                            verbose = FALSE, parallel = 10)
+                                            dis_relevant_tissues = disr, 
+                                            W = centrality_score$borda.disc, cutoff = 10,
+                                            verbose = FALSE, parallel = 2)
 ```
 
 ```{r, cache = TRUE, echo = FALSE, eval = FALSE}

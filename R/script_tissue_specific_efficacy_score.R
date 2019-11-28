@@ -123,7 +123,7 @@ tissue.specific.scores <- function(disease_genes, ppi_network, directed_network 
     stop('Incomplete data input.')
   # compile the wsp
   wsp_list = weighted.shortest.path(disease_genes,ppi_network,
-                                    directed_network,tissue_expr_data,
+                                    directed_network, tissue_expr_data,
                                     dis_relevant_tissues, W, cutoff, verbose)
   tissue_scores <- apply(wsp_list$shortest_paths, 2, function(x) {
     q <- stats::quantile(x)
@@ -145,6 +145,7 @@ tissue.specific.scores <- function(disease_genes, ppi_network, directed_network 
 list.tissue.specific.scores <- function(disease_gene_list, ppi_network, directed_network = F,
                                         tissue_expr_data,  dis_relevant_tissues, W, cutoff = 1.6,
                                         verbose = FALSE, parallel = NULL) {
+  print("ciao")
   if(is.list(disease_gene_list) == FALSE) stop('Argument disease_gene_list is not a list!')
   if(is.null(names(disease_gene_list))) stop('Names for disease_gene_list must be provided!')
   if(is.matrix(dis_relevant_tissues) == FALSE) stop('Argument dis_relevant_tissues is not a matrix!')
@@ -152,7 +153,7 @@ list.tissue.specific.scores <- function(disease_gene_list, ppi_network, directed
     stop('Both colnames and rownames for dis_relevant_tissues must be provided!')
   }
   common_diseases <- intersect(names(disease_gene_list), rownames(dis_relevant_tissues))
-  if(length(common_diseases)==0) stop('No disease in common between disease_gene_list and dis_relevant_tissues!')
+  if(length(common_diseases)==0) stop('No diseases in common between disease_gene_list and dis_relevant_tissues!')
   else if(length(common_diseases) != length(names(disease_gene_list))){
     if(verbose) print(paste(length(common_diseases),'diseases in common between disease_gene_list and dis_relevant_tissues.',sep=' '))
   }
@@ -164,8 +165,13 @@ list.tissue.specific.scores <- function(disease_gene_list, ppi_network, directed
     `%dopar%` <- foreach::`%dopar%`
     wsp <- foreach::foreach(dis=common_diseases,
                             .export = 'weighted.shortest.path',
-                            .final = function(i) stats::setNames(dis, common_diseases)) %dopar%
-      weighted.shortest.path(disease_gene_list[[dis]], ppi_network, directed_network, tissue_expr_data, dis_relevant_tissues[dis,], W, cutoff = cutoff)
+                            .final = function(i) setNames(i, common_diseases)) %dopar% {
+      weighted.shortest.path(disease_gene_list[[dis]], 
+                             ppi_network, 
+                             directed_network, 
+                             tissue_expr_data, 
+                             dis_relevant_tissues[dis,], 
+                             W, cutoff = cutoff)}
     snow::stopCluster(cl)
   }
   else {
