@@ -32,7 +32,7 @@ install_github("vittoriofortino84/ThETA")
 ```
 The above code will not build vignettes by default because they’re time consuming and may require additional packages.
 
-If you wish to build the vignette files use the following code. It will take approximately 13min. 
+If you wish to build the vignettes use the following code (it will take approximately 13min). 
 ```r
 install_github("vittoriofortino84/ThETA", build_opts = c("--no-resave-data", "--no-manual"), build_vignettes = TRUE)
 ```
