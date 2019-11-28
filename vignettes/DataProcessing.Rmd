@@ -255,7 +255,7 @@ tissue_score <- list.tissue.specific.scores(disease_gene_list = disg,
                                             tissue_expr_data = gtexv7_zscore,  
                                             dis_relevant_tissues = disr, 
                                             W = centrality_score$borda.disc, cutoff = 1.6,
-                                            verbose = FALSE, parallel = 2)
+                                            verbose = FALSE, parallel = 20)
 ```
 
 ```{r, cache = TRUE, echo = FALSE, eval = FALSE}
