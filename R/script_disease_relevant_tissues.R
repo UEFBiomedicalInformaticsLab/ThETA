@@ -269,13 +269,13 @@ list.dis.rel.tissues <- function(disease_gene_list, ppi_network, weighted = FALS
 #'@importFrom shiny validate
 #'@importFrom shiny fluidPage
 #'@importFrom shiny fluidRow
-#'@importFrom shiny fluidRow
+#'@importFrom shiny textOutput
 #'@importFrom clusterProfiler enrichKEGG
 #'@importFrom clusterProfiler enrichGO
 #'@importFrom scales rescale
 visualize.graph <- function(tissue_scores, disease_genes, ppi_network, directed_network = FALSE,
                             tissue_expr_data, top_targets = NULL, orgdb_go = 'org.Hs.eg.db', 
-                            db='kegg',verbose = FALSE){
+                            db='kegg', verbose = FALSE){
   
   if(is.null(top_targets)) stop('Please specifiy a set of targets (ENTREZ ids)!')
   if(is.null(rownames(tissue_expr_data))|is.null(colnames(tissue_expr_data))){
@@ -335,9 +335,11 @@ visualize.graph <- function(tissue_scores, disease_genes, ppi_network, directed_
           width = 12,
           shiny::tableOutput("table")
         )
-      )
+      ),
+      shiny::textOutput("text")
     ),
     server = function(input, output) {
+      last_id <- NULL
       output$network <- visNetwork::renderVisNetwork({
         shiny::validate(need(input$tissue!='','Please select one or more tissues'))
         if(length(input$tissue)>1){
@@ -350,14 +352,18 @@ visualize.graph <- function(tissue_scores, disease_genes, ppi_network, directed_
         edge <- edge[!duplicated(edge),]
         colnames(edge) <- c('from','to')
         edge$width <- scales::rescale(rowMeans(1-tissue_expr_data[edge$from,input$tissue,drop=F]),c(1,5))
+        edge$arrows <- 'to'
         nb <- unique(unlist(edge[,1:2]))
         node <- data.frame(id=nb,label=nb,stringsAsFactors = F)
-        node$value <- rowMeans(tissue_scores[nb,input$tissue,drop=F])
+        #node$title <- AnnotationDbi:mapIds(org.Hs.eg.db::org.Hs.eg.db,as.character(nb),'SYMBOL','ENTREZID')
+        node$size <- rowMeans(tissue_scores[nb,input$tissue,drop=F])*20
         gp <- rep('bridge gene',nrow(node))
         gp[node$label%in%top_targets] <- 'target gene'
         gp[node$label%in%disease_genes] <- 'disease gene'
         node$group <- gp
-        node$shape <- c("circle","star","diamond")[as.numeric(as.factor(gp))]
+        node$shape <- rep('dot',length(gp))
+        node$shape[gp=='target gene'] <- 'triangle'
+        node$shape[gp=='disease gene'] <- 'star'
         visNetwork::visNetwork(node, edge, height = "1500px", width = "500%") %>%
           visNetwork::visGroups(groupname = "target gene", color = list(background = "skyblue", border = "deepskyblue")) %>%
           visNetwork::visGroups(groupname = "disease gene", color = list(background = "lightcoral", border = "red")) %>%
@@ -368,23 +374,29 @@ visualize.graph <- function(tissue_scores, disease_genes, ppi_network, directed_
             list(label = "target gene", shape = "diamond",
                  color = list(background = "skyblue", border = "deepskyblue")),
             list(label = "bridge gene", shape = "circle")), useGroups = FALSE,width=0.1) %>%
-          visNetwork::visLayout(hierarchical = TRUE) %>%  # visLayout(randomSeed = 123), visIgraphLayout(layout = "layout_with_sugiyama")
+          visNetwork::visIgraphLayout(layout = "layout_with_sugiyama")  %>%  # visLayout(randomSeed = 123), visLayout(hierarchical = TRUE)
           visNetwork::visEvents(select = "function(nodes) {
                     Shiny.onInputChange('current_node_id', nodes.nodes);
                     ;}")
       })
       need = NULL
       output$table <- shiny::renderTable({
-        shiny::validate(need(input$tissue!='',NULL),
-                 need(input$current_node_id != '' & input$current_node_id %in% top_targets,'Please select a target gene'))
-        current_target_path <- sapply(all_target_path[input$tissue],function(x) x[input$current_node_id])
-        current_target_path <- Reduce(igraph::intersection,current_target_path)
-        target_interactors <- unique(c(igraph::ends(g,current_target_path)))
-        if(db=='kegg') res <- clusterProfiler::enrichKEGG(target_interactors,organism = 'hsa')@result
-        else res <- clusterProfiler::enrichGO(target_interactors, orgdb_go, ont = db)@result
-        res <- res[res$p.adjust<0.05,]
-        if (nrow(res) > 25) res <- res[1:25,]
-        res
+        res = NULL
+        if (is.null(last_id) | !identical(last_id,input$current_node_id) ) {
+          shiny::validate(need(input$current_node_id%in%top_targets,'Please select a target gene'))
+          last_id <- input$current_node_id
+          current_target_path <- sapply(all_target_path[input$tissue],function(x) x[input$current_node_id])
+          current_target_path <- Reduce(igraph::intersection,current_target_path)
+          target_interactors <- unique(c(igraph::ends(g,current_target_path)))
+          if(db=='kegg') res <- clusterProfiler::enrichKEGG(target_interactors,organism = 'hsa')@result
+          else res <- clusterProfiler::enrichGO(target_interactors, 'org.Hs.eg.db', ont = db)@result
+          res <- res[res$p.adjust<0.05,]
+          if (nrow(res) > 25) res <- res[1:25,]
+          res
+        }
+        else{
+          validate(need(!is.null(res),'Please select a target gene'))
+        } 
       })
     }
   )

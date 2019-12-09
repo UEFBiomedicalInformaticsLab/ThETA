@@ -349,10 +349,10 @@ library(visNetwork)
 library(org.Hs.eg.db)
 
 visualize.graph(tissue_scores = T2DM_Tscores, 
-                 disease_genes =T2DM_genes$entrez[1:5],
+                 disease_genes = T2DM_genes$entrez[1:5],
                  ppi_network = ppi_strdb_700, 
                  tissue_expr_data = gtexv7_zscore,
-                 top_targets = rownames(T2DM_top50)[1:5], 
+                 top_targets = rownames(T2DM_allsc)[1:5], 
                  db='BP')
 ```           
 
