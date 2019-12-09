@@ -36,9 +36,9 @@ To build the vignette use the following code. It will take approximately 13 minu
 ```r
 install_github("vittoriofortino84/ThETA", build_opts = c("--no-resave-data", "--no-manual"), build_vignettes = TRUE)
 ```
-Please, open the available vignette files to learn how to use this R package.
 
 ```r
+browseVignettes('ThETA')
 vignette("Introduction", package = "ThETA")
 vignette("DataProcessing", package = "ThETA")
 ```
