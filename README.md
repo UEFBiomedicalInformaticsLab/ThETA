@@ -3,10 +3,6 @@ ThETA: Transcriptome-driven Efficacy estimates for gene-based TArget discovery
 
 This R package was built to provide the implementation of novel trasncriptome-based efficacy scores of target(gene)-disease associations, which have been recentely described in [Failli et al. 2019](https://www.nature.com/articles/s41598-019-46293-7). It provides utility functions to recompile the scores based on the selection of different disease-relevant gene sets and tissue-specific gene expresstion profiles. Morevoer, it provides the users with an easy access to the disease-gene association scores compiled by the [Open Target platform](https://www.targetvalidation.org/) and functions to merge the OT-based scores with our novel efficacy scores in order to provide a final prioritization of target(gene)-disease associations. Finally, the users can run basic visualization functions in order to visualize the tissue-specific gene networks and biological annotations associated to top drug targets (or genes) and closely related genes slected with a random walk algorithm. 
 
-[Introduction](https://htmlpreview.github.io/?https://github.com/vittoriofortino84/ThETA/blob/master/Introduction.html)
-
-https://htmlpreview.github.io/?https://github.com/twbs/bootstrap/gh-pages/2.3.2/
-
 ## Installation
 
 As a pre-requisite, you need to have BioConductor and a set of BioConductor packages installed, you can do this with:
@@ -40,6 +36,10 @@ To build the vignette use the following code. It will take approximately 13 minu
 ```r
 install_github("vittoriofortino84/ThETA", build_opts = c("--no-resave-data", "--no-manual"), build_vignettes = TRUE)
 ```
+Note: the building process of the vignettes takes more than 15 minutes. This is why we provide a pre-compiled version accessible from this Git-hub page:
+
+[Introduction](https://htmlpreview.github.io/?https://github.com/vittoriofortino84/ThETA/blob/master/Introduction.html)
+
 
 ```r
 browseVignettes('ThETA')
