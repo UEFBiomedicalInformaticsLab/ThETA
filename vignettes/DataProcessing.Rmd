@@ -197,7 +197,7 @@ ppi_strdb_700 <- data.frame(node1=gtexv7_mapped$entrez_id[idx_from], node2=gtexv
 The PPI compiled from STRINGdb will be a data frame containing a symbolic edge list in the first two columns and connection scores in the third column.
 
 ```{r, table2, cache.lazy = TRUE, echo = FALSE, eval = FALSE}
-knitr::kable(ppi_strdb_700[1:5, ]) %>%
+knitr::kable(ppi_strdb_700[1:5, ], format = 'html') %>%
   kable_styling(bootstrap_options = "striped", full_width = F) 
 ```
 
@@ -263,7 +263,7 @@ load('~/tissue_score.rda')
 ```
 
 ```{r, check_ts, cache = TRUE, echo = FALSE, eval = FALSE}
-knitr:::kable(tissue_score[[1]][1:5,]) %>%
+knitr:::kable(tissue_score[[1]][1:5,], format = 'html') %>%
   kable_styling(bootstrap_options = "striped", full_width = F) %>%
   scroll_box(width = "500px", height = "200px")
 ```

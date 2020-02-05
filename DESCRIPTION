@@ -20,9 +20,9 @@ License: GPL-3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.0.0
-Suggests: knitr, rmarkdown, ggpubr, kableExtra, grex, CePa, jsonlite, httr, dplyr, AnnotationDbi, org.Hs.eg.db
+Suggests: knitr, rmarkdown, grex, CePa, jsonlite, httr, dplyr, AnnotationDbi, org.Hs.eg.db
 VignetteBuilder: knitr
-Imports: Rdpack, RCurl, SPARQL, XML, dnet, mltools, snow, doParallel, ggplot2, MIGSA, ReactomePA, clusterProfiler, enrichplot, visNetwork, data.table, foreach, igraph, reshape2, shiny, reshape, scales
+Imports: Rdpack, RCurl, SPARQL, XML, dnet, mltools, snow, doParallel, ggplot2, MIGSA, ReactomePA, clusterProfiler, enrichplot, visNetwork, data.table, foreach, igraph, reshape2, shiny, reshape, scales, kableExtra, ggpubr
 RdMacros: Rdpack
 NeedsCompilation: no
 Packaged: 2019-11-18 08:45:57 UTC; vittfo

@@ -12,6 +12,7 @@
 #'        - \code{Description}: a character specifying either the extended name of the disease or the gene modulation type.
 #' If the list object is empty, then the following list of genes sets will be downloaded from EnrichR
 #' (\url{https://amp.pharm.mssm.edu/Enrichr/}) by using the R (Bioconductor) package \pkg{MIGSA} \insertRef{Rodriguez2019}{ThETA}.
+#'@param verbose logical indicating whether the messages will be displayed or not in the screen.
 #'@return a data frame with target-disease associations and related modulation scores. The gene modulation type and
 #'the disease name are also reported.
 #'@export
@@ -23,13 +24,14 @@
 #'@importFrom scales rescale
 #'@importFrom data.table as.data.table
 #'@importFrom data.table .SD
-modulation.score <- function(geneSets = NULL){
+modulation.score <- function(geneSets = NULL, verbose = FALSE){
   if(is.null(geneSets)){
     diff_exp_gene_sets <- MIGSA::downloadEnrichrGeneSets(c('Disease_Perturbations_from_GEO_up',
                                                             'Disease_Perturbations_from_GEO_down',
                                                             'Single_Gene_Perturbations_from_GEO_up',
                                                             'Single_Gene_Perturbations_from_GEO_down'))
     geneSets <- list()
+    if (verbose) print("Pre-processing the gene sets.")
     for(i in names(diff_exp_gene_sets)){
       x <- diff_exp_gene_sets[[i]]
       geneSets[[i]] <- list()
@@ -58,10 +60,11 @@ modulation.score <- function(geneSets = NULL){
   }
   prtrb_specular <- lapply(seq(1,4,by=2),function(i) geneSets[c(i,i+1)])
   prtrb_specular[[2]] <- rev(prtrb_specular[[2]])
+  if (verbose) print("Compiling the intersection between dysregulated gene sets derived from disease and gene perturbations.")
   occ.<-mapply(function(x,y) sapply(x,function(i)sapply(y,function(j) length(intersect(i$geneIds,j$geneIds)))),
                prtrb_specular[[1]], prtrb_specular[[2]],SIMPLIFY=F)
   names(occ.)<-c('up-down','down-up')
-  ### Calculating the composite z-scores for each disease-gene perturbation interaction
+  if (verbose) print("Calculating the composite z-scores for each disease-gene perturbation interaction.")
   z1 <- lapply(occ.,function(x)t(apply(x,1,function(y)(y-mean(y))/stats::sd(y))))
   z2 <- lapply(occ.,function(x)apply(x,2,function(y)(y-mean(y))/stats::sd(y)))
   Z <- mapply('+',z1,z2,SIMPLIFY = F)

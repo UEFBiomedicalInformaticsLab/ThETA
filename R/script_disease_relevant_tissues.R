@@ -171,6 +171,7 @@ dis.rel.tissues <- function(disease_genes, ppi_network, weighted = FALSE, tissue
   zscores <- c()
   tissue_genes <- sapply(colnames(tissue_expr_data), function(i) rownames(tissue_expr_data)[tissue_expr_data[,i]>=thr])
   for(tgs in tissue_genes) {
+    if (verbose) print(paste("..verifying if the tissue ", tgs, " is significant for the specified set of disease-genes.", sep=""))
     # intersect the ppi network with tissue-specific genes
     df <- ppi_network[ppi_network[,1] %in% tgs & ppi_network[,2] %in% tgs,]
     g <- igraph::graph_from_data_frame(df[,1:2], directed = FALSE)
@@ -401,4 +402,3 @@ visualize.graph <- function(tissue_scores, disease_genes, ppi_network, directed_
     }
   )
 }
-

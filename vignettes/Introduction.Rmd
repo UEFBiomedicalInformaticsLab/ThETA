@@ -51,18 +51,17 @@ knitr::opts_chunk$set(
 
 ## Compile transcriptome-driven efficacy estimates of target(gene)-disease associations
 
-The R package ThETA implements two novel algorithms to identify and rank target-disease associations based on efficacy estimates compiled from gene expression profiles of
-gene perturbations and human diseases (Modulation Score), and tissue-specific gene expression networks (Tissue-specific Efficacy Scores). These methods are described in Failli et al. 2019 (https://www.nature.com/articles/s41598-019-46293-7).
+The R package ThETA implements two novel algorithms to identify and rank target-disease associations based on efficacy estimates compiled from gene expression profiles of gene perturbations and human diseases (Modulation Score), and tissue-specific gene expression networks (Tissue-specific Efficacy Scores). These methods are described in Failli et al. 2019 (https://www.nature.com/articles/s41598-019-46293-7).
 
 **Current functions provided by ThETA**
 
 * Compile tissue-specific expression networks by using GTEx and StringDB (Human PPI).
-* Compile diseas-relevant tissues by implementing the algorithm proposed by Kitsak et al. 2016 (https://www.nature.com/articles/srep35241).
+* Compile disease-relevant tissues by implementing the algorithm proposed by Kitsak et al. 2016 (https://www.nature.com/articles/srep35241).
 * Extract disease-relevant genes from DisGeNET and mark these genes on the disease-relevant tissue-specific gene expression.
 * Compile the tissue-specific efficacy scores on disease-relevant tissues.
-* Compile the modulation score, which estimates the likelihood of a gene perturbation (e.g., knockout and knockdown) to result in specific reversion of disease gene-expression profiles (lists of down- and up-regualted genes are downbaloded from Enrichr: https://amp.pharm.mssm.edu/Enrichr/).
+* Compile the modulation score, which estimates the likelihood of a gene perturbation (e.g., knockout and knockdown) to result in specific reversion of disease gene-expression profiles (lists of down- and up-regulated genes are downloaded from Enrichr: https://amp.pharm.mssm.edu/Enrichr/).
 * Integrate multiple efficacy scores with the max function and the harmonic sum (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5210543/).
-* Build igraph objects including tissue-specific networks and paths connecting selected drug-targets (or genes) and disease-relevant genes (it also include info on the gene modulation scores). 
+* Build igraph objects including tissue-specific networks and paths connecting selected drug-targets (or genes) and disease-relevant genes (it also includes info on the gene modulation scores). 
 
 ## 1. How to compile the tissue-specific efficacy estimates of target(gene)-disease associations
 
@@ -104,7 +103,7 @@ data(disease_tissue_zscores)
 data(centrality_score)
 ```
 
-Then, given a disease (i.e. Diabetes Mellitus Type II - T2DM), we can compile the tissue-specific efficacy scores. 
+Then, given a disease (i.e. Diabetes Mellitus Type II - T2DM), we compile the tissue-specific efficacy scores. 
 
 1. Variant genes related to T2DM are selected from *dis_vrnts* by using the EFO-id.
 
@@ -118,9 +117,9 @@ T2DM_genes = dis_vrnts[[which(names(dis_vrnts) == "EFO:0001360")]]
 T2DM_rel_tissue_scores = disease_tissue_zscores$z[which(rownames(disease_tissue_zscores$z) == "EFO:0001360"),]
 ```
 
-3. A tissue-specific efficacy (TSE) score is then estimated for all genes that are expressed in the tissues that are relevant for T2D. It should be noted that the following script is computer-intensive. Indeed, we specified only two genes in input. However, it is highly recommended to use the whole set of T2D-relevant genes.  
+3. A tissue-specific efficacy (TSE) score is then estimated for all genes that are expressed in the tissues whic are relevant for T2DM. It should be noted that the following script is computer-intensive. Indeed, we specified only two genes in input. However, it is highly recommended to use the whole set of T2D-relevant genes.  
 
-```{r, t2d_sco, cache.lazy = TRUE, echo = TRUE, results = 'hide'}
+```{r, t2d_sco, cache.lazy = TRUE, echo = TRUE}
 T2DM_Tscores <- tissue.specific.scores(T2DM_genes$entrez[1:2], 
                                         ppi_network = ppi_strdb_700, 
                                         directed_network = FALSE, 
@@ -133,7 +132,7 @@ T2DM_Tscores <- tissue.specific.scores(T2DM_genes$entrez[1:2],
 The output is a *data.frame* object containing the TSE score for all genes-tissue pairs.
 
 ```{r, cache = TRUE, echo = FALSE, message = FALSE}
-knitr::kable(T2DM_Tscores[1:5,]) %>%
+knitr::kable(T2DM_Tscores[1:5,], format = 'html') %>%
   kableExtra::kable_styling(bootstrap_options = "striped", full_width = F) 
 ```
 
@@ -144,9 +143,9 @@ T2DM_top50 <- T2DM_Tscores[order(T2DM_Tscores$avg_tissue_score,
                                   decreasing = TRUE)[1:50],]
 ```
 
-The following plot shows the distribution of the TSE scores for the top 50 genes within each disease relevant tissue,. 
+The following plot shows the distribution of the TSE scores for the top 50 genes within each disease relevant tissue. 
 
-```{r, t2d_plot1, fig.width=5, fig.height=3, cache.lazy = TRUE, echo = TRUE }
+```{r, t2d_plot1, fig.width=7, fig.height=3, cache.lazy = TRUE, echo = TRUE }
 library(ggplot2)
 library(reshape)
 data_t2d50 <- reshape::melt(as.matrix(T2DM_top50), id = 0)
@@ -163,7 +162,7 @@ ggplot(data_t2d50, aes(x = Tissue, y = EfficacyScore, fill = Tissue)) +
 
 Additionally, the following barplot reports the tissue-specific scores for the top 5 genes within each tissue.
 
-```{r, t2d_plot2, fig.width=5, fig.height=3, cache.lazy = TRUE, echo = TRUE}
+```{r, t2d_plot2, fig.width=7, fig.height=3, cache.lazy = TRUE, echo = TRUE}
 library(ggplot2)
 library(reshape)
 data_t2d5 <- reshape::melt(as.matrix(T2DM_top50[1:5,-ncol(T2DM_top50)]), id = 0)
@@ -190,11 +189,11 @@ data(geo_gene_sets)
 
 The ThETA package provides a function to calculate the modulation score for all the genes (since it is not a computationaly intensive task).
 ```{r, get_mods, cache.lazy = TRUE, echo = TRUE}
-modulation_scores <- modulation.score(geneSets = geo_gene_sets)
+modulation_scores <- modulation.score(geneSets = geo_gene_sets, verbose = TRUE)
 ```
 
 ```{r, modscores_tab, cache = TRUE, echo = FALSE}
-knitr:::kable(modulation_scores[1:5, ]) %>%
+knitr:::kable(modulation_scores[1:5, ], format = 'html') %>%
   kableExtra::kable_styling(bootstrap_options = "striped", full_width = F) 
 ```
 
@@ -243,7 +242,7 @@ T2DM_Mscores = data.frame(modul_score[modul_score$disease.id=='EFO:0001360',
 ```
 
 ```{r, t2d_mods_tab, cache = TRUE, echo = FALSE}
-knitr:::kable(head(T2DM_Mscores)) %>%
+knitr:::kable(head(T2DM_Mscores), format = 'html') %>%
   kableExtra::kable_styling(bootstrap_options = "striped", full_width = F) %>%
   kableExtra::scroll_box(width = "200px", height = "300px")
 ```
@@ -260,9 +259,9 @@ T2DM_Iscores <- data.frame("Mscore" = T2DM_Mscores[common_t2d_genes,],
 ```
 
 ```{r, int_scores_tab, cache = TRUE, echo = FALSE}
-knitr:::kable(T2DM_Iscores[1:5, c(1:3, ncol(T2DM_Iscores))]) %>%
+knitr:::kable(T2DM_Iscores[1:5, c(1:3, ncol(T2DM_Iscores))], format = 'html') %>%
   kableExtra::kable_styling(bootstrap_options = "striped", full_width = F) %>%
-  kableExtra::scroll_box(width = "700px", height = "200px")
+  kableExtra::scroll_box(width = "700px", height = "250px")
 ```
 
 Multi-evidence rankings of putative drug targets can be further extended by including efficacy scores obtained from other computational platform for drug target discovery such as Open Target platform. 
@@ -307,7 +306,7 @@ OT_score <- OT_score[!is.na(OT_score$target.entrez),]
 ```
 
 ```{r, op_tab, cache = TRUE, echo = FALSE}
-knitr:::kable(head(OT_score)) %>%
+knitr:::kable(head(OT_score), format = 'html') %>%
   kableExtra::kable_styling(bootstrap_options = "striped", full_width = F) %>%
   kableExtra::scroll_box(width = "700px", height = "150px")
 ```
@@ -334,14 +333,14 @@ colnames(tab_score)[1:4] <- c("GeneTarget","OTScore","ModulationScore","TissueEf
 ```
 
 ```{r, op_int, cache = TRUE, echo = FALSE}
-knitr:::kable(head(tab_score)) %>%
+knitr:::kable(head(tab_score), format = 'html') %>%
   kableExtra::kable_styling(bootstrap_options = "striped", full_width = F) %>%
-  kableExtra::scroll_box(width = "700px", height = "200px")
+  kableExtra::scroll_box(width = "700px", height = "250px")
 ```
 
 ## 4. How to visualize tissue-specific networks and biological annotations of selected drug(gene) targets
 
-A shiny-based application was built for the visualization of  tissue-specific gene networks highlighting connections between disease-genes and drug(gene)-targets. 
+A shiny-based application was built for the visualization of tissue-specific gene networks highlighting connections between disease-genes and drug(gene)-targets. 
 
 ```{r, cache.lazy = TRUE, eval = FALSE}
 library(shiny)

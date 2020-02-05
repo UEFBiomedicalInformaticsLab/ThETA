@@ -4,7 +4,7 @@
 \alias{modulation.score}
 \title{Modulation Scores Compiled Between Gene Modulations And Disease Perturbations.}
 \usage{
-modulation.score(geneSets = NULL)
+modulation.score(geneSets = NULL, verbose = FALSE)
 }
 \arguments{
 \item{geneSets}{a list of four lists including up or down gene sets identified in disease or gene perturbations
@@ -15,6 +15,8 @@ Each gene set object is a list of two items:\cr
        - \code{Description}: a character specifying either the extended name of the disease or the gene modulation type.
 If the list object is empty, then the following list of genes sets will be downloaded from EnrichR
 (\url{https://amp.pharm.mssm.edu/Enrichr/}) by using the R (Bioconductor) package \pkg{MIGSA} \insertRef{Rodriguez2019}{ThETA}.}
+
+\item{verbose}{logical indicating whether the messages will be displayed or not in the screen.}
 }
 \value{
 a data frame with target-disease associations and related modulation scores. The gene modulation type and

@@ -63,10 +63,16 @@ weighted.shortest.path <- function(disease_genes, ppi_network, directed_network 
   if(length(sign_tiss) != 0){
     if(verbose) print(paste(length(sign_tiss),' tissue/s significant for given disease.',sep=''))
     target_path_mean <- NULL
-    sh.path <- lapply(sign_tiss,function(i){
-      igraph::E(g)$weight <- tissue_expr_data[ppi_network[,1],i]
-      igraph::distances(g, to=disease_genes, mode =  "out", weights = NULL, algorithm = "dijkstra")
-    })
+    sh.path <- list()
+    for(i in 1:length(sign_tiss)) {
+      if (verbose) print(paste("Compiling the tissue-specific efficacy scores for disease-genes in ", sign_tiss[i], ".", sep=""))
+      igraph::E(g)$weight <- tissue_expr_data[ppi_network[,1],sign_tiss[i]]
+      sh.path[[i]] <- igraph::distances(g, to=disease_genes, mode =  "out", weights = NULL, algorithm = "dijkstra")
+    }
+    #sh.path <- lapply(sign_tiss, function(i){
+    #  igraph::E(g)$weight <- tissue_expr_data[ppi_network[,1],i]
+    #  igraph::distances(g, to=disease_genes, mode =  "out", weights = NULL, algorithm = "dijkstra")
+    #})
     names(sh.path) <- sign_tiss
     sh.path <- lapply(sh.path,function(x){
         x[is.infinite(x)]<-(3*max(x[which(is.finite(x))],na.rm = TRUE))
@@ -122,7 +128,7 @@ tissue.specific.scores <- function(disease_genes, ppi_network, directed_network 
   if(is.null(disease_genes) | is.null(tissue_expr_data) | is.null(ppi_network) | is.null(dis_relevant_tissues))
     stop('Incomplete data input.')
   # compile the wsp
-  wsp_list = weighted.shortest.path(disease_genes,ppi_network,
+  wsp_list = weighted.shortest.path(disease_genes, ppi_network,
                                     directed_network, tissue_expr_data,
                                     dis_relevant_tissues, W, cutoff, verbose)
   tissue_scores <- apply(wsp_list$shortest_paths, 2, function(x) {
@@ -251,8 +257,10 @@ build.tissue.specific.networks <- function(tissue_scores, disease_genes, ppi_net
   shp_top_genes <- list()
   rwr_top_genes <- list()
   for(i in 1: length(sign_tiss)) {
+    if (verbose) print(paste("Building the tissue-specific gene network for ", sign_tiss[i], ".", sep=""))
     g <- igraph::graph_from_edgelist(as.matrix(ppi_network[,1:2]), directed=T)
     igraph::E(g)$weight <- tissue_expr_data[ppi_network[,1], sign_tiss[i]]
+    if (verbose) print(paste("Compiling the shortest paths between disease-genes and top-(", length(top_targets),") gene targets.", sep = ""))
     # select disease genes active in this tissue and search for shortest paths
     tissue_disease_genes <- intersect(disease_genes, igraph::V(g)$name)
     shp_top_genes[[length(shp_top_genes) + 1]] <- lapply(top_targets, function(x) {
@@ -267,8 +275,14 @@ build.tissue.specific.networks <- function(tissue_scores, disease_genes, ppi_net
     aSeeds[which((igraph::V(g)$name%in%top_targets) == TRUE)] <- 1
     setSeeds <- data.frame(aSeeds)
     rownames(setSeeds) <- igraph::V(g)$name
-    rwr_top_genes[[length(rwr_top_genes)+1]] <- as.numeric(dnet::dRWR(g, normalise = "none", setSeeds = setSeeds, restart = rwr_restart,
-                                                                      normalise.affinity.matrix = rwr_norm, parallel = FALSE, multicores = NULL, verbose = F))
+    if (verbose) print("Identifying genes tightly connected to the top-n targets.")
+    rwr_top_genes[[length(rwr_top_genes)+1]] <- suppressMessages(as.numeric(dnet::dRWR(g, normalise = "none", 
+                                                                                       setSeeds = setSeeds, 
+                                                                                       restart = rwr_restart,
+                                                                                       normalise.affinity.matrix = rwr_norm, 
+                                                                                       parallel = FALSE, 
+                                                                                       multicores = NULL, 
+                                                                                       verbose = FALSE)))
     names(rwr_top_genes[[length(rwr_top_genes)]]) = igraph::V(g)$name
     rwr_top_genes[[length(rwr_top_genes)]] = names(rwr_top_genes[[length(rwr_top_genes)]])[which(rwr_top_genes[[length(rwr_top_genes)]] >= rwr_cutoff)]
     #
