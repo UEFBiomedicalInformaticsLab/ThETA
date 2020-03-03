@@ -151,7 +151,6 @@ tissue.specific.scores <- function(disease_genes, ppi_network, directed_network 
 list.tissue.specific.scores <- function(disease_gene_list, ppi_network, directed_network = F,
                                         tissue_expr_data,  dis_relevant_tissues, W, cutoff = 1.6,
                                         verbose = FALSE, parallel = NULL) {
-  print("ciao")
   if(is.list(disease_gene_list) == FALSE) stop('Argument disease_gene_list is not a list!')
   if(is.null(names(disease_gene_list))) stop('Names for disease_gene_list must be provided!')
   if(is.matrix(dis_relevant_tissues) == FALSE) stop('Argument dis_relevant_tissues is not a matrix!')

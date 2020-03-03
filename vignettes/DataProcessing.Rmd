@@ -210,7 +210,7 @@ if("ontologyIndex" %in% rownames(installed.packages()) == FALSE) {install.packag
 library(ontologyIndex)
 
 # select the genes associated with each disease annotated in the OBO file
-efo.OBO <- get_OBO('../data/efo_feb2019.obo', extract_tags = "everything") 
+efo.OBO <- get_OBO(system.file("efo_feb2019.obo", package = "ThETA"), extract_tags = "everything") 
 # remove the tag "EFO:" from each id
 efo_ids <- gsub('EFO:','', grep('EFO:', efo.OBO$id, value = T)) 
 # select gene-disease associations from DisGeNET
@@ -264,8 +264,8 @@ load('~/tissue_score.rda')
 
 ```{r, check_ts, cache = TRUE, echo = FALSE, eval = FALSE}
 knitr:::kable(tissue_score[[1]][1:5,], format = 'html') %>%
-  kable_styling(bootstrap_options = "striped", full_width = F) %>%
-  scroll_box(width = "500px", height = "200px")
+kableExtra:::kable_styling(bootstrap_options = "striped", full_width = F) %>%
+  kableExtra:::scroll_box(width = "500px", height = "200px")
 ```
 
 ### How to format averaged tissue-specifc efficacy scores

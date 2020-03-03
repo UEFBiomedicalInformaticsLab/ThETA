@@ -234,6 +234,16 @@ modul_score <- as.data.frame(modul_score[, .SD[which.max(modscore)],
                                            by=list(disease.id, target.entrez)])
 ```
 
+The R package ThETA also provides an R function to compile and visualize PPV-curves.
+
+```{r, ppv_plot, fig.width=7, fig.height=3, cache.lazy = TRUE, echo = TRUE, message = FALSE}
+vm <- ppvpercents(list(TTD=GS_TTD, BDK=GS_DBK), modul_score,
+                  entrez.col = "target.entrez", 
+                  disease.col = "disease.id", 
+                  score.col = c("modscore"))
+vm
+```
+
 Let's now select the modulation scores for T2D.
 
 ```{r, t2d_mods, cache.lazy = TRUE, echo = TRUE}

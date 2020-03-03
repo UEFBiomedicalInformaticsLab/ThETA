@@ -152,3 +152,62 @@
 #' @examples
 #' data(tss_t2d_top50)
 "tss_t2d_top50"
+
+#' Set of known drug-target-disease associations retrieved from the Therapeutic Target Database (TTD)
+#' (http://db.idrblab.net/ttd/)
+#' 
+#' 27/02/2020
+#'
+#' @docType data
+#'
+#' @usage data(GS_TTD)
+#'
+#' @format A data frame indicating gene(drug-target)-disease associations.
+#' 
+#'   target.entrez      disease.id                        description
+#'            7039     EFO:0003884             chronic kidney disease
+#'            1490     EFO:0009549 female reproductive system disease
+#'
+#' @keywords datasets
+#'
+#' @examples
+#' data(GS_TTD)
+"GS_TTD"
+
+#' Set of known drug-target-disease associations retrieved from the DrugBank Database (DBK)
+#' (https://www.drugbank.ca/)
+#'
+#' @docType data
+#'
+#' @usage data(GS_DBK)
+#'
+#' @format A data frame indicating gene(drug-target)-disease associations.
+#' 
+#'   target.entrez      disease.id                        description
+#'            7039     EFO:0003884             chronic kidney disease
+#'            1490     EFO:0009549 female reproductive system disease
+#'
+#' @keywords datasets
+#'
+#' @examples
+#' data(GS_DBK)
+"GS_DBK"
+
+#' Set of known drug-target-disease associations retrieved from the Comparative Toxicogenomics Database (CTD)
+#' (http://ctdbase.org/)
+#'
+#' @docType data
+#'
+#' @usage data(GS_CTD)
+#'
+#' @format A data frame indicating gene(drug-target)-disease associations.
+#' 
+#'   target.entrez      disease.id                        description
+#'            7039     EFO:0003884             chronic kidney disease
+#'            1490     EFO:0009549 female reproductive system disease
+#'
+#' @keywords datasets
+#'
+#' @examples
+#' data(GS_CTD)
+"GS_CTD"
