@@ -234,10 +234,12 @@ modul_score <- as.data.frame(modul_score[, .SD[which.max(modscore)],
                                            by=list(disease.id, target.entrez)])
 ```
 
-The R package ThETA also provides an R function to compile and visualize PPV-curves.
+The following example shows how to use the *ppvpercents* function to generate and visualize PPV-curves.
+It requires 5 inputs: a list of sets of known target-disese associations, efficacy estimates and the columns that are used to indicate the entrez gene IDs, the disease IDs (EFO-id) and the efficayc estimates. 
 
 ```{r, ppv_plot, fig.width=7, fig.height=3, cache.lazy = TRUE, echo = TRUE, message = FALSE}
-vm <- ppvpercents(list(TTD=GS_TTD, BDK=GS_DBK), modul_score,
+vm <- ppvpercents(list(TTD=GS_TTD, BDK=GS_DBK), 
+                  modul_score,
                   entrez.col = "target.entrez", 
                   disease.col = "disease.id", 
                   score.col = c("modscore"))
