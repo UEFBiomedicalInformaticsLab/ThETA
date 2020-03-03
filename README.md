@@ -36,6 +36,10 @@ To build the vignette use the following code. It will take approximately 13 minu
 ```r
 install_github("vittoriofortino84/ThETA", build_opts = c("--no-resave-data", "--no-manual"), build_vignettes = TRUE)
 ```
+Note: the building process for the vignette(s) takes more than 15 minutes. This is why we provide a pre-compiled version accessible from this Git-hub page:
+
+* [Introduction](https://htmlpreview.github.io/?https://github.com/vittoriofortino84/ThETA/blob/master/Introduction.html)
+* [Re-compile .rda files](https://htmlpreview.github.io/?https://github.com/vittoriofortino84/ThETA/blob/master/DataProcessing.html)
 
 ```r
 browseVignettes('ThETA')
