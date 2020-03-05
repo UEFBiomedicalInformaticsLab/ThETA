@@ -235,9 +235,12 @@ modul_score <- as.data.frame(modul_score[, .SD[which.max(modscore)],
 ```
 
 The following example shows how to use the *ppvpercents* function to generate and visualize PPV-curves.
-It requires 5 inputs: a list of sets of known target-disese associations, efficacy estimates and the columns that are used to indicate the entrez gene IDs, the disease IDs (EFO-id) and the efficayc estimates. 
+It requires 5 inputs: a list of sets of known target-disese associations, a matrix containing efficacy estimates and character vectors indicating the columns for entrez gene IDs, disease IDs (EFO-id) and efficacy sccores. 
 
 ```{r, ppv_plot, fig.width=7, fig.height=3, cache.lazy = TRUE, echo = TRUE, message = FALSE}
+data(GS_TTD)
+data(GS_DBK)
+
 vm <- ppvpercents(list(TTD=GS_TTD, BDK=GS_DBK), 
                   modul_score,
                   entrez.col = "target.entrez", 

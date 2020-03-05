@@ -30,6 +30,7 @@
 #'@export
 #'@import ggplot2
 #'@importFrom reshape2 melt
+#'@importFrom prodlim row.match
 ppvpercents <- function(gold_std, test, 
                         entrez.col = NULL, 
                         disease.col = NULL, 
@@ -58,7 +59,7 @@ ppvpercents <- function(gold_std, test,
       if(i==1)
         gold_std[[j]] <- gold_std[[j]][!duplicated(gold_std[[j]]),]
       new_test <- new_test[new_test[,disease.col] %in% gold_std[[j]][,disease.col],]
-      ind <- matching.rows(gold_std[[j]][,c(entrez.col,disease.col)], new_test, nomatch = NA)
+      ind <- prodlim::row.match(gold_std[[j]][,c(entrez.col,disease.col)], new_test, nomatch = NA)
       ind <- sort(ind[!is.na(ind)])
       nconn <- nrow(new_test)
       ppv[[i]][[j]] <- vector(mode='integer',length = 100)
@@ -73,7 +74,8 @@ ppvpercents <- function(gold_std, test,
   if(plot){
     ppv <- reshape2::melt(ppv)
     p <- ggplot2::ggplot(data=ppv,
-                         ggplot2::aes(x=rep(1:100,nrow(ppv)/100), y=value, colour= factor(L2))) +
+                         ggplot2::aes(x=rep(1:100,nrow(ppv)/100), 
+                                      y=ppv$value, colour= factor(ppv$L2))) +
                          ggplot2::geom_hline(yintercept = 1) + 
                          ggplot2::xlab('Percentile (%)') + 
                          ggplot2::ylab('Normalized PPV') +
@@ -83,15 +85,3 @@ ppvpercents <- function(gold_std, test,
   }
   else return(ppv)
 } 
-
-#'A function for matching rows between two matrices or data.frames. 
-#'@keywords internal
-matching.rows <- function (dat, tab, nomatch = NA)  {
-  if (class(tab) == "matridat") 
-    tab <- as.data.frame(tab)
-  if (is.null(dim(dat))) 
-    dat <- as.data.frame(matridat(dat, nrow = 1))
-  cx <- do.call("paste", c(dat[, , drop = FALSE], sep = "\r"))
-  ct <- do.call("paste", c(tab[, , drop = FALSE], sep = "\r"))
-  match(cx, ct, nomatch = nomatch)
-}

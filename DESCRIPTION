@@ -22,7 +22,7 @@ LazyData: true
 RoxygenNote: 7.0.0
 Suggests: knitr, rmarkdown, grex, CePa, jsonlite, httr, dplyr, AnnotationDbi, org.Hs.eg.db
 VignetteBuilder: knitr
-Imports: Rdpack, RCurl, SPARQL, XML, dnet, mltools, snow, doParallel, ggplot2, MIGSA, ReactomePA, clusterProfiler, enrichplot, visNetwork, data.table, foreach, igraph, reshape2, shiny, reshape, scales, kableExtra, ggpubr
+Imports: Rdpack, RCurl, SPARQL, XML, dnet, mltools, snow, doParallel, ggplot2, MIGSA, ReactomePA, clusterProfiler, enrichplot, visNetwork, data.table, foreach, igraph, reshape2, shiny, reshape, scales, kableExtra, ggpubr, prodlim
 RdMacros: Rdpack
 NeedsCompilation: no
 Packaged: 2019-11-18 08:45:57 UTC; vittfo
