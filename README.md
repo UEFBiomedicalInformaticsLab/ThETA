@@ -38,8 +38,8 @@ install_github("vittoriofortino84/ThETA", build_opts = c("--no-resave-data", "--
 ```
 Note: the building process for the vignette(s) takes more than 15 minutes. This is why we provide a pre-compiled version accessible from this Git-hub page:
 
-* [Introduction](https://htmlpreview.github.io/?https://github.com/vittoriofortino84/ThETA/blob/master/Introduction.html)
-* [Re-compile .rda files](https://htmlpreview.github.io/?https://github.com/vittoriofortino84/ThETA/blob/master/DataProcessing.html)
+* [Introduction](https://htmlpreview.github.io/?https://github.com/vittoriofortino84/Data-Vignettes/blob/master/ThETA/Vignettes/Introduction.html)
+* [Re-compile .rda files](https://htmlpreview.github.io/?https://github.com/vittoriofortino84/Data-Vignettes/blob/master/ThETA/Vignettes/DataProcessing.html)
 
 ```r
 browseVignettes('ThETA')
