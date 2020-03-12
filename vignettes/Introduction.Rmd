@@ -154,8 +154,8 @@ ggplot(data_t2d50, aes(x = Tissue, y = EfficacyScore, fill = Tissue)) +
         geom_boxplot(alpha = 0.7) +
         ggtitle("Boxplot of the efficacy scores for tissues") +
         theme_bw() +
-        theme(plot.title = element_text(size = 8, family = "Tahoma", face = "bold"),
-                text = element_text(size = 7, family = "Tahoma"),
+        theme(plot.title = element_text(size = 8, face = "bold"),
+                text = element_text(size = 7),
                 axis.title = element_text(face="bold"),
                 axis.text.x=element_text(size = 7)) 
 ```
@@ -173,8 +173,8 @@ ggplot(data_t2d5, aes(x = EntrezID, y = EfficacyScore, fill = EntrezID)) +
         ggtitle("Barplot comparing the efficacy scores of genes acrsso significant tissues") +
         facet_wrap(~Tissue) +
         theme_bw() + 
-        theme(plot.title = element_text(size = 8, family = "Tahoma", face = "bold"),
-                    text = element_text(size = 7, family = "Tahoma"),
+        theme(plot.title = element_text(size = 8, face = "bold"),
+                    text = element_text(size = 7),
                     axis.title = element_text(face="bold"),
                     axis.text.x=element_text(size = 7)) 
 ``` 
@@ -380,7 +380,6 @@ The following example shows how to use the function *build_tissue_specific_netwo
 tsrwr = build.tissue.specific.networks(tissue_scores = T2DM_Tscores, disease_genes = T2DM_genes$entrez,
                                        ppi_network = ppi_strdb_700, tissue_expr_data = gtexv7_zscore, 
                                        top_targets = rownames(T2DM_top50)[1:5], verbose = FALSE)
-
 ```
 
 Then, ThETA provides functions to compile 
