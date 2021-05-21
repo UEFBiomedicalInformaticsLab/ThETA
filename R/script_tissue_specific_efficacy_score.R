@@ -17,7 +17,7 @@
 #'Names correspond to tissues.
 #'@param W a list of discretized Borda-aggregated rankings for each tissue as the one compiled by \code{get_node_centrality}.
 #'@param cutoff numeric value indicating the cut-off for the disease-associated tissue scores.
-#'@param tissues character vector indicating a set of tissues to be used without considering the cut-off value.
+#'@param selected_tissues character vector indicating a set of tissues to be used without considering the cut-off value.
 #'@param verbose logical indicating whether the messages will be displayed or not in the screen.
 #'@return A list of two score objects:\cr
 #'        - \strong{shortest_paths}: a shortest path score for each pair <gene, tissue>;\cr
@@ -28,7 +28,7 @@
 #'@importFrom scales rescale
 weighted.shortest.path <- function(disease_genes, ppi_network, directed_network = F,
                                    tissue_expr_data, dis_relevant_tissues, W, cutoff = 1.6, 
-                                   tissues = NULL, verbose=F) {
+                                   selected_tissues = NULL, verbose=F) {
   #
   if(is.null(rownames(tissue_expr_data))|is.null(colnames(tissue_expr_data))){
     stop('Both colnames and rownames for tissue_expr_data must be provided.')
