@@ -57,17 +57,15 @@ weighted.shortest.path <- function(disease_genes, ppi_network, directed_network 
   }
   tissue_expr_data <- scales::rescale(tissue_expr_data,c(1,.Machine$double.eps))
   g <- igraph::graph_from_edgelist(as.matrix(ppi_network[,1:2]), directed=T)
-  if(is.null(tissues) & !is.null(dis_relevant_tissues)) { 
+  if(is.null(selected_tissues) & !is.null(dis_relevant_tissues)) { 
     if(is.vector(dis_relevant_tissues) == FALSE) 
       stop('Argument dis_relevant_tissues is not a vector!')
-    if(!is.null(tissues) & is.null(names(dis_relevant_tissues))) 
-      stop('Names for dis_relevant_tissues must be provided!')
   }
   # selecting relevant tissues
-  if(is.null(tissues))
+  if(is.null(selected_tissues))
     sign_tiss <- names(which(dis_relevant_tissues >= cutoff))
   else 
-    sign_tiss <- tissues
+    sign_tiss <- selected_tissues
   if(length(sign_tiss) != 0){
     if(verbose) print(paste(length(sign_tiss),' tissue/s significant for given disease.',sep=''))
     target_path_mean <- NULL
