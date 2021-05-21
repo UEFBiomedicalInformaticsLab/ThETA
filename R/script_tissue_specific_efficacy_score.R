@@ -17,6 +17,7 @@
 #'Names correspond to tissues.
 #'@param W a list of discretized Borda-aggregated rankings for each tissue as the one compiled by \code{get_node_centrality}.
 #'@param cutoff numeric value indicating the cut-off for the disease-associated tissue scores.
+#'@param tissues character vector indicating a set of tissues to be used without considering the cut-off value.
 #'@param verbose logical indicating whether the messages will be displayed or not in the screen.
 #'@return A list of two score objects:\cr
 #'        - \strong{shortest_paths}: a shortest path score for each pair <gene, tissue>;\cr
@@ -26,8 +27,8 @@
 #'@importFrom igraph E graph_from_edgelist distances
 #'@importFrom scales rescale
 weighted.shortest.path <- function(disease_genes, ppi_network, directed_network = F,
-                                   tissue_expr_data, dis_relevant_tissues, W, cutoff = 1.6,
-                                   verbose=F) {
+                                   tissue_expr_data, dis_relevant_tissues, W, cutoff = 1.6, 
+                                   tissues = NULL, verbose=F) {
   #
   if(is.null(rownames(tissue_expr_data))|is.null(colnames(tissue_expr_data))){
     stop('Both colnames and rownames for tissue_expr_data must be provided.')
@@ -56,10 +57,17 @@ weighted.shortest.path <- function(disease_genes, ppi_network, directed_network 
   }
   tissue_expr_data <- scales::rescale(tissue_expr_data,c(1,.Machine$double.eps))
   g <- igraph::graph_from_edgelist(as.matrix(ppi_network[,1:2]), directed=T)
-  if(is.vector(dis_relevant_tissues) == FALSE) stop('Argument dis_relevant_tissues is not a vector!')
-  if(is.null(names(dis_relevant_tissues))) stop('Names for dis_relevant_tissues must be provided!')
-  # selecting relevenat tissues
-  sign_tiss <- names(which(dis_relevant_tissues >= cutoff))
+  if(is.null(tissues) & !is.null(dis_relevant_tissues)) { 
+    if(is.vector(dis_relevant_tissues) == FALSE) 
+      stop('Argument dis_relevant_tissues is not a vector!')
+    if(!is.null(tissues) & is.null(names(dis_relevant_tissues))) 
+      stop('Names for dis_relevant_tissues must be provided!')
+  }
+  # selecting relevant tissues
+  if(is.null(tissues))
+    sign_tiss <- names(which(dis_relevant_tissues >= cutoff))
+  else 
+    sign_tiss <- tissues
   if(length(sign_tiss) != 0){
     if(verbose) print(paste(length(sign_tiss),' tissue/s significant for given disease.',sep=''))
     target_path_mean <- NULL
@@ -115,6 +123,7 @@ weighted.shortest.path <- function(disease_genes, ppi_network, directed_network 
 #'rownames correspond to tissues and diseases, respectively. Names must be provided.
 #'@param W a list of discretized Borda-aggregated rankings for each tissue as the one compiled by \code{get_node_centrality}.
 #'@param cutoff numeric value indicating the cut-off for the disease-associated tissue scores.
+#'@param selected_tissues character vector indicating a set of tissues to be used independently from the cut-off value.
 #'@param verbose logical indicating whether the messages will be displayed or not in the screen.
 #'@param parallel an integer indicating how many cores will be registered for parallel computation.
 #'@return a data frame or a list of data frames containing tissue specific scores.
@@ -124,13 +133,33 @@ weighted.shortest.path <- function(disease_genes, ppi_network, directed_network 
 #'@importFrom stats quantile
 tissue.specific.scores <- function(disease_genes, ppi_network, directed_network = F,
                                    tissue_expr_data,  dis_relevant_tissues, W, cutoff = 1.6,
-                                   verbose = FALSE) {
-  if(is.null(disease_genes) | is.null(tissue_expr_data) | is.null(ppi_network) | is.null(dis_relevant_tissues))
+                                   selected_tissues = NULL, verbose = FALSE) {
+  if(is.null(disease_genes) | is.null(tissue_expr_data) | is.null(ppi_network) | 
+     (is.null(dis_relevant_tissues) & is.null(selected_tissues)))
     stop('Incomplete data input.')
   # compile the wsp
-  wsp_list = weighted.shortest.path(disease_genes, ppi_network,
-                                    directed_network, tissue_expr_data,
-                                    dis_relevant_tissues, W, cutoff, verbose)
+  if(is.null(selected_tissues) & !is.null(dis_relevant_tissues)) {
+    wsp_list = weighted.shortest.path(disease_genes, ppi_network,
+                                      directed_network, tissue_expr_data,
+                                      dis_relevant_tissues, W, cutoff, tissues = NULL, verbose)
+  }
+  else if(is.character(selected_tissues)){
+    print("New function..")
+    selected_tissues <- intersect(colnames(tissue_expr_data), selected_tissues)
+    if(length(selected_tissues) == 0) stop('Please provide a set of valid tissue names.')
+    if(verbose)
+        print(paste("Number of selected tissues:", length(selected_tissues), sep=""))
+    wsp_list = weighted.shortest.path(disease_genes = disease_genes, 
+                                      ppi_network = ppi_network,
+                                      directed_network = directed_network, 
+                                      tissue_expr_data = tissue_expr_data,
+                                      dis_relevant_tissues = dis_relevant_tissues, 
+                                      W = W, cutoff = NULL, 
+                                      tissues = selected_tissues, verbose)
+  }
+  else 
+      print("Please, provide a valid list of tissue names.")
+  
   tissue_scores <- apply(wsp_list$shortest_paths, 2, function(x) {
     q <- stats::quantile(x)
     outliers <- q[4]+(1.5*(q[4]-q[2]))

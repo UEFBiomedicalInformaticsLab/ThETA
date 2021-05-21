@@ -1,0 +1,14 @@
+base
+dplyr
+ThETA
+ggplot2
+reshape
+BiocGenerics
+Biobase
+S4Vectors
+IRanges
+AnnotationDbi
+org.Hs.eg.db
+data.table
+httr
+jsonlite
