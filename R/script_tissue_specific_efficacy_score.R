@@ -153,7 +153,7 @@ tissue.specific.scores <- function(disease_genes, ppi_network, directed_network 
                                       tissue_expr_data = tissue_expr_data,
                                       dis_relevant_tissues = dis_relevant_tissues, 
                                       W = W, cutoff = NULL, 
-                                      tissues = selected_tissues, verbose)
+                                      selected_tissues = selected_tissues, verbose)
   }
   else 
       print("Please, provide a valid list of tissue names.")
